@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ImplicitEx</title>
+        <link rel="stylsheet" href=" /styles/main.css" />
+    </head>
+    <body>
+        <h1>ImplicitEx</h1>
+        <button id="connect">Connect Wallet</button>
+        <script type="module">
+            import { connectWallet } from '../src/wallet.js' ;
+            document.getElementById( 'connect').onclick = async () => {
+                const addr = await connectWallet();
+                if (addr) alert('Wallet connected: ${addr}');
+            };
+        </script>
+    </body>
+</html>
