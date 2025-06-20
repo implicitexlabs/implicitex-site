@@ -1,18 +1,179 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>ImplicitEx</title>
-        <link rel="stylsheet" href=" /styles/main.css" />
-    </head>
-    <body>
-        <h1>ImplicitEx</h1>
-        <button id="connect">Connect Wallet</button>
-        <script type="module">
-            import { connectWallet } from '../src/wallet.js' ;
-            document.getElementById( 'connect').onclick = async () => {
-                const addr = await connectWallet();
-                if (addr) alert('Wallet connected: ${addr}');
-            };
-        </script>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <title>ImplicitEx</title>
+</head>
+<body>
+    <div class="page-container">
+        <main class="main-content">
+            <div class="logo-wrap">
+
+
+                <div class="brandmark-svg">
+                <!-- ImplicitEx Brandmark Inline SVG -->
+                <svg class="brandmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" style="width: 100%; height: auto; max-width: 200px; display: block; margin: 0 auto;" fill="#F5F7FA">
+                <path d="M777.9,854.48L145.65,222.23l12.31-12.31,632.25,632.25s49.25,49.25,110.81-12.31c61.56-61.56,12.31-110.81,12.31-110.81L281.09,86.79l12.31-12.31,209.86,209.86,55.41-55.41,
+                154.97-154.97,12.31,12.31-210.38,210.38,123.13,123.13, 210.38-210.38,12.31,12.31-210.38,210.38,55.41,55.41,210.38-210.38s49.25-49.25-12.31-110.81c-61.56-61.56-110.81-12.31-110.81-12.31l-161.12,
+                161.12-12.31-12.31,161.12-161.12s49.25-49.25-12.31-110.81c-61.56-61.56-110.81-12.31-110.81-12.31l-154.97,154.97L348.81,19.07s-49.25-49.25-110.81,12.31c-61.56,61.56-12.31,110.81-12.31,
+                110.81l632.25,632.25-12.31,12.31L213.37,154.51s-49.25-49.25-110.81,12.31c-61.56,61.56-12.31,110.81-12.31,110.81l632.25,632.25-12.31,12.31-209.97-209.97-213.62,213.62-12.31-12.31,
+                213.62-213.62-123.13-123.13-213.62,213.62-12.31-12.31,213.62-213.62-55.41-55.41-213.62,213.62s-49.25,49.25,12.31,110.81c61.56,61.56,110.81,12.31,110.81,12.31l164.37-164.37,12.31,
+                12.31-164.37,164.37s-49.25,49.25,12.31,110.81c61.56,61.56,110.81,12.31,110.81,12.31l158.21-158.21,154.56,154.56s49.25,49.25,110.81-12.31c61.56-61.56,12.31-110.81,12.31-110.81Z"/>
+                </svg>
+                </div>
+
+                <div class="wordmark-svg">
+                <!-- ImplicitEx Wordmark Inline SVG -->
+                <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" style="width: 100%; height: auto; max-width: 500px; display: block; margin: 0 auto;">
+                <polygon points="67.54 130.24 67.54 70.54 157.09 70.54 157.09 130.24 149.63 130.24 149.63 78 116.04 78 116.04 130.24 108.58 130.24 108.58 78 75 78 75 130.24 67.54 130.24" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><path d="M216.79,70.54v59.7h7.46v-29.85h52.24v-29.85h-59.7ZM269.03,92.92h-44.78v-14.93h44.78v14.93Z" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><polygon points="336.19 70.54 336.19 130.24 395.89 130.24 395.89 122.77 343.66 122.77 343.66 70.54 336.19 70.54" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><rect x="455.6" y="70.54" width="7.46" height="59.7" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><polygon points="522.76 70.54 522.76 130.24 582.46 130.24 582.46 122.77 530.22 122.77 530.22 78 582.46 78 582.46 70.54 522.76 70.54" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><polygon points="701.86 70.54 701.86 78 727.98 78 727.98 130.24 735.45 130.24 735.45 78 761.57 78 761.57 70.54 701.86 70.54" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><polygon points="821.27 70.54 880.97 70.54 880.97 78 828.73 78 828.73 96.66 880.97 96.66 880.97 104.12 828.73 104.12 828.73 122.77 880.97 122.77 880.97 130.24 821.27 130.24 821.27 70.54" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><rect x="634.7" y="70.54" width="7.46" height="59.7" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><rect x=".37" y="70.54" width="7.46" height="59.7" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><polygon points="1000.37 70.54 1000.37 81.73 981.72 100.39 1000.37 119.04 1000.37 130.24 970.52 100.39 1000.37 70.54" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/><polygon points="940.67 70.54 940.67 81.73 959.33 100.39 940.67 119.04 940.67 130.24 970.52 100.39 940.67 70.54" 
+                fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/></svg>
+                </div>
+
+            </div>
+
+            <!-- End logo wrap -->
+
+            <h1 class="tagline">Send USDC with a 1% fee.</h1>
+
+            <div class="intro-text" style="max-width: 600px; margin: 0 auto 30px auto; text-align: center;">
+                <p style="font-size: 1.2rem; color: #F5F7FA; margin-bottom: 1rem;">
+                    Simple, secure person-to-person exchange. Move USDC directly between wallets. 
+                No hidden fees. Just fast, transparent value exchange you can trust.</p>
+            </div>
+
+            <!-- Button group for consistent spacing -->
+            <div class="button-group">
+                <button class="button" id="btn-connectwallet" aria-label="Connect your Ethereum wallet">Connect Wallet</button>
+                <button class="button btn-learnmore" id="learn-more">Learn More</button>
+            </div>
+
+            <!-- Feedback for wallet address -->
+            <div id="wallet-address" aria-live="polite">Wallet: <span id="wallet-data"></span></div>
+
+            <h2 id="countdown" style="margin-top:40px;">Launching in...</h2>
+        </main>
+        <div id="footer-placeholder"></div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const connectBtn = document.getElementById('btn-connectwallet');
+        const walletData = document.getElementById('wallet-data');
+        const addrDisplay = document.getElementById('wallet-address');
+    
+        function shortenAddress(addr) {
+            if (!addr) return "";
+            return addr.slice(0, 6) + "..." + addr.slice(-4);
+        }
+    
+        let fullWalletAddress = "";
+        let showFullTimeout = null;
+    
+        connectBtn.addEventListener('click', async () => {
+            if (typeof window.ethereum === "undefined") {
+                alert("No Ethereum provider detected. Please install MetaMask.");
+                walletData.textContent = "";
+                addrDisplay.style.color = "#F66";
+                return;
+            }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                if (accounts && accounts.length > 0) {
+                    connectBtn.textContent = 'Connected';
+                    connectBtn.disabled = true;
+                    connectBtn.style.opacity = 0.7;
+                    fullWalletAddress = accounts[0];
+                    walletData.textContent = shortenAddress(fullWalletAddress);
+                    walletData.title = "Click to reveal full address";
+                    addrDisplay.style.color = "#30B886";
+                } else {
+                    walletData.textContent = "";
+                    addrDisplay.style.color = "#F66";
+                    alert('No accounts found.');
+                }
+            } catch (err) {
+                walletData.textContent = "";
+                addrDisplay.style.color = "#F66";
+                alert('User rejected connection or error occurred: ' + (err.message || err));
+            }
+        });
+    
+        // Reveal full address on click for 4 seconds
+        walletData.addEventListener('click', function () {
+            if (!fullWalletAddress) return;
+            if (showFullTimeout) clearTimeout(showFullTimeout);
+            walletData.textContent = fullWalletAddress;
+            walletData.title = "Double-click to copy address";
+            walletData.classList.add('revealed');
+            // Auto-hide after 4 seconds
+            showFullTimeout = setTimeout(() => {
+                walletData.textContent = shortenAddress(fullWalletAddress);
+                walletData.title = "Click to reveal full address";
+                walletData.classList.remove('revealed');
+            }, 4000);
+        });
+    
+        // Copy to clipboard when full address is shown and double-clicked
+        walletData.addEventListener('dblclick', function () {
+            if (walletData.textContent === fullWalletAddress) {
+                navigator.clipboard.writeText(fullWalletAddress);
+                walletData.title = "Copied!";
+                walletData.style.color = "#FFD35C";
+                setTimeout(() => {
+                    walletData.style.color = "#F5F7FA";
+                    walletData.title = "Click to reveal full address";
+                }, 1200);
+            }
+        });
+    });
+    </script>
+    <!-- Countdown Timer -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const countdown = document.getElementById('countdown');
+            const targetDate = new Date("2025-06-30T00:00:00").getTime();
+
+            const interval = setInterval(() => {
+                const now = Date.now();
+                const distance = targetDate - now;
+
+                if (distance <= 0) {
+                    clearInterval(interval);
+                    countdown.innerHTML = "Now Live!";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
+        });
+    </script>
+
+    <!-- Load Modular Footer -->
+    <script>
+        fetch('components/footer.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
 </html>

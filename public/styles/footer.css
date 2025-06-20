@@ -1,0 +1,66 @@
+:root {
+    --charcoal-blue: #0D1A2C;
+    --cloud-white: #F5F7FA;
+    --slate-teal: #6699A1;
+    --signal-green: #30B886;
+    }.footer {
+
+
+    background-color: var(--slate-teal);
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--cloud-white);
+    font-size: 0.875rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+}
+
+.footer-links {
+    margin-bottom: 1rem;
+}
+
+.footer-links a {
+    color: var(--charcoal-blue);
+    text-decoration: none;
+    margin: 0.04rem;
+    opacity: 0.8;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: var(--slate-teal);
+}
+
+.social-icons {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.social-icons a {
+    display: inline-block;
+    text-decoration: none;
+    line-height: 0;
+    margin: 0 0.5rem;
+}
+
+.social-icons svg {
+    width: 24px;
+    height: 24px;
+    opacity: 0.75;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.social-icons svg:hover {
+    transform: scale(1.2);
+    opacity: 1;
+    filter: drop-shadow(0 0 1px var(--signal-green));
+}
+
+.footer .copyright {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}

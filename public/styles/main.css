@@ -1,0 +1,207 @@
+:root {
+    --charcoal-blue: #0D1A2C;
+    --cloud-white: #F5F7FA;
+    --slate-teal: #6699A1;
+    --signal-green: #30B886;
+    --usdc-yellow: #FFD35C;
+}
+
+.page-container {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.main-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center vertically */
+    width: 100%;
+}
+
+.logo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 3rem 1rem 0 1rem;
+  }
+  .brandmark-svg {
+    width: clamp(80px, 18vw, 150px);
+    margin: 0 auto 1.1rem auto;
+  }
+  .brandmark-svg svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .wordmark-svg {
+    width: clamp(180px, 90vw, 800px); /* Responsive sizing */
+    margin: 0 auto 0.7rem auto;
+  }
+  .wordmark-svg svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--charcoal-blue);
+    font-family: 'Inter', Arial, sans-serif;
+    color: var(--cloud-white);
+    overflow-x: hidden;
+    height: 100%;
+    min-height: 100vh;
+}
+
+body {
+    background: var(--charcoal-blue);
+    color: var(--cloud-white);
+    text-align: center;
+    flex-direction: column;
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+h1 {
+    font-size: clamp(2rem, 4vw, 2rem);
+    font-weight: 750;
+    line-height: 1.2;
+    margin: 40px auto 10px auto;
+    max-width: 800px;
+    padding: 0 1rem;
+    color: var(--cloud-white);
+}
+
+/* Button group for clean alignment */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 24px;              /* More space between buttons */
+    margin-top: 1.7rem;     /* More space above button row */
+}
+
+/* Remove individual button margin-top if using button-group */
+.button, button {
+    color: var(--charcoal-blue);
+    background: var(--signal-green);
+    border: none;
+    padding: 0.85rem 2.1rem;
+    font-size: 1.07rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.98;
+    box-shadow: 0 3px 18px 1px #12ff995a;
+    transition: background 0.14s, transform 0.2s;
+}
+
+.button:hover, button:hover {
+    background: var(--signal-green);
+    color: var(--cloud-white);
+    transform: scale(1.03);
+}
+
+/* Learn More button variation */
+.btn-learnmore {
+    background: var(--charcoal-blue);
+    color: var(--cloud-white);
+    border: 1px solid var(--cloud-white);
+    transition: background 0.14s;
+}
+.btn-learnmore:hover {
+    background: var(--slate-teal);
+    color: #0D1A2C;
+}
+
+/* Wallet address styling */
+
+#wallet-address {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2.2rem auto 0 auto;
+    color: #30B886;
+    background: rgba(245, 247, 250, 0.12);
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    padding: 0.9rem 1.5rem;
+    max-width: 420px;
+    min-height: 38px;
+    min-width: 220px;
+    box-shadow: 0 4px 28px 0 #12ff9940, 0 1.5px 8px 0 #0002;
+    border: 1.7px solid #30B88640;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    transition: box-shadow 0.18s, background 0.18s;
+    background-clip: padding-box;
+    overflow-x: auto;
+    white-space: pre-line; /* Allows wrapping, but not in the middle of a word */
+    word-break: break-all; /* Allows breaking in long words/addresses */
+  }
+
+  #wallet-address span#wallet-data:empty::after {
+    content: "Not connected";
+    color: #aaa;
+    font-style: italic;
+  }
+  #wallet-address span#wallet-data {
+    margin-left: 0.5em;
+    color: #F5F7FA;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.12s;
+    margin-left: 0.5em;
+    color: #F5F7FA;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    word-break: break-all;      /* Important! */
+    max-width: 100%;
+    display: inline-block;
+    cursor: pointer;
+    transition: color 0.16s, background 0.16s;
+  }
+
+
+#wallet-address span#wallet-data.revealed {
+    background: #222d3a;
+    color: #FFD35C;
+    border-radius: 6px;
+    padding: 0.08em 0.38em;
+    transition: background 0.2s, color 0.16s;
+}
+
+#wallet-address.active {
+    display: block;
+    animation: fadeinCard 0.6s;
+}
+@keyframes fadeinCard {
+    from { opacity: 0; transform: translateY(10px);}
+    to   { opacity: 1; transform: translateY(0);}
+}
+
+/* USDC balance styling */
+#usdc-balance {
+    color: var(--usdc-yellow);
+    font-weight: 700;
+    font-size: 1.12rem;
+    margin-bottom: 1.7rem;
+    min-height: 1.4em;
+}
+
+#footer-placeholder {
+    flex-shrink: 0;
+}
