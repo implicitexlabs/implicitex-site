@@ -3,7 +3,10 @@
     --cloud-white: #F5F7FA;
     --slate-teal: #6699A1;
     --signal-green: #30B886;
-    }.footer {
+    --sunset-yellow: #FFD35C;
+    }
+    
+    .footer {
 
 
     background-color: var(--slate-teal);
@@ -47,14 +50,14 @@
     margin: 0 0.5rem;
 }
 
-.social-icons svg {
+.social-icons img {
     width: 24px;
     height: 24px;
     opacity: 0.75;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.social-icons svg:hover {
+.social-icons img:hover {
     transform: scale(1.2);
     opacity: 1;
     filter: drop-shadow(0 0 1px var(--signal-green));
