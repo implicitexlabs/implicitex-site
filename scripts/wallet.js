@@ -6,13 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let fullWalletAddress = "";
     let showFullTimeout = null;
 
-    // --- Utility: Shorten Wallet Address ---
     function shortenAddress(addr) {
         if (!addr) return "";
         return addr.slice(0, 6) + "..." + addr.slice(-4);
     }
 
-    // --- Network & Provider Setup ---
     const alchemyProvider = new ethers.JsonRpcProvider(
         "https://eth-mainnet.g.alchemy.com/v2/tNw9iRsScHuuRi9OzxX1lGHx83a3UNmt"
     );
@@ -32,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // --- Show Wallet Balances ---
     async function showBalances(address) {
         const balancesDiv = document.getElementById('wallet-balances');
         balancesDiv.innerHTML = 'Retrieving balances...';
@@ -44,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ethBal = Number(ethers.formatEther(ethRaw)).toLocaleString(undefined, { maximumFractionDigits: 6 });
 
             const network = await provider.getNetwork();
-            let USDC_ADDRESS = network.chainId === 11155111
+            const USDC_ADDRESS = network.chainId === 11155111
                 ? "0x5c221e77624690fff6dd741493d735a17716c26b"
                 : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 
@@ -55,7 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, provider);
             const decimals = await usdc.decimals();
             const raw = await usdc.balanceOf(address);
-            usdcBal = Number(ethers.formatUnits(raw, decimals)).toLocaleString(undefined, { maximumFractionDigits: 2 });
+            window.currentUSDCBalance = parseFloat(ethers.formatUnits(raw, decimals)); // store for modal logic
+            usdcBal = window.currentUSDCBalance.toLocaleString(undefined, { maximumFractionDigits: 2 });
         } catch (err) {
             console.error("Balance error:", err);
         }
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
-    // --- Connect Wallet ---
     connectBtn.addEventListener('click', async () => {
         if (!window.ethereum) {
             alert("No Ethereum provider detected. Please install MetaMask.");
@@ -88,19 +85,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 walletData.title = "Click to reveal full address";
                 addrDisplay.style.color = "#30B886";
                 showBalances(fullWalletAddress);
-            
+
                 document.getElementById('btn-create').disabled = false;
                 document.getElementById('wallet-hint').style.display = 'none';
-
-                // ✅ Enable transaction button
-                createBtn.disabled = false;
             }
         } catch (err) {
             alert('User rejected connection or error occurred: ' + (err.message || err));
         }
     });
 
-    // --- Reveal/Copy Address Logic ---
     walletData.addEventListener('click', () => {
         if (!fullWalletAddress) return;
         if (showFullTimeout) clearTimeout(showFullTimeout);
@@ -137,71 +130,82 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Modal Launch for Transaction ---
     createBtn.addEventListener('click', () => {
+        const hint = document.getElementById('wallet-hint');
         if (!fullWalletAddress) {
-            const hint = document.getElementById('wallet-hint');
+            hint.classList.add('visible');
             hint.style.visibility = 'visible';
             hint.style.opacity = 1;
             hint.textContent = 'Please connect your wallet first.';
-            hint.classList.add('visible');
+            setTimeout(() => {
+                hint.classList.remove('visible');
+                hint.style.opacity = 0;
+                hint.style.visibility = 'hidden';
+            }, 4000);
             return;
         }
-        document.getElementById('wallet-hint').classList.remove =('visible');
+        hint.classList.remove('visible');
         openTransactionModal();
     });
-
     function openTransactionModal() {
         const modalHtml = `
             <div style="margin-bottom: 1.1em;">
                 <label class="summary-label" for="modal-recipient">Recipient Address</label><br />
-                <input id="modal-recipient" type="text" placeholder="0x..."style="width: 100%; padding: 0.5em; margin-top: 0.3em;
-               font-family: 'Fira Mono', monospace; font-weight: 700; color: #0D1A2C;" />
+                <input id="modal-recipient" type="text" placeholder="0x..." style="width: 100%; padding: 0.5em; margin-top: 0.3em;
+                    font-family: 'Fira Mono', monospace; font-weight: 700; color: #0D1A2C;" />
                 <div id="address-warning" style="margin-top: 0.3em; font-size: 0.86rem; display: none;"></div>
             </div>
 
-            <div style="margin-bottom: 1.1em;"><label class="summary-label" for="modal-amount">Amount (USDC)</label><br />
+            <div style="margin-bottom: 1.1em;">
+                <label class="summary-label" for="modal-amount">Amount (USDC)</label><br />
                 <input id="modal-amount" type="number" min="0" step="0.01" placeholder="e.g. 20.00" style="width: 100%; padding: 0.5em; margin-top: 0.3em;
-               font-family: 'Fira Mono', monospace; font-weight: 700; color: #0D1A2C;" />
+                    font-family: 'Fira Mono', monospace; font-weight: 700; color: #0D1A2C;" />
+                <div id="amount-warning" class="warning-text" style="display: none; font-size: 0.85rem; color: #FF4D4D; margin-top: 0.3em;"></div>
             </div>
-
 
             <div class="modal-fee-summary">
-                <div>
-                <span class="summary-label">Total Cost:</span>
-                <span class="summary-value" id="total-display">—</span>
-                <span class="summary-label">USDC</span>
+                <div style="font-size: 0.85rem; opacity: 0.6;">
+                    Transfer Fee (USDC): <span id="fee-display">—</span>
                 </div>
+                <br>
+                <div style="font-weight: bold; font-size: 1.3rem; margin-top: 0.3em; color: #FFD530;">
+                    Transfer Total (USDC): <span id="total-display">—</span>
+                </div>
+            </div>
 
-                <div>
-                    <span class="summary-label">Fee (1%):</span>
-                    <span class="summary-value" id="fee-display">—</span>
-                    <span class="summary-label">USDC</span>
-                </div>
-            </div>
-            </div>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1.2em; text-align: center;">
+                By continuing, you agree to the <a href="terms.html" target="_blank" style="color: #FFD530; text-decoration: underline;">Terms of Use</a>.
+            </p>
         `;
-    
+
         showModal(modalHtml, async () => {
             const recipient = document.getElementById('modal-recipient').value.trim();
             const amount = parseFloat(document.getElementById('modal-amount').value.trim());
-    
+
             if (!ethers.isAddress(recipient)) {
                 alert("❌ Invalid Ethereum address.");
                 return;
             }
+
             if (isNaN(amount) || amount <= 0) {
                 alert("❌ Invalid USDC amount.");
                 return;
             }
-    
+
+            const total = amount + amount * 0.01;
+            if (total > (window.currentUSDCBalance || 0)) {
+                alert("❌ Insufficient USDC balance.");
+                return;
+            }
+
             try {
                 const chainId = await window.ethereum.request({ method: 'eth_chainId' });
                 const browserProvider = new ethers.BrowserProvider(window.ethereum);
                 const signer = await browserProvider.getSigner();
-    
+
                 const USDC_ADDRESS = chainId === "0xaa36a7"
                     ? "0x5c221e77624690fff6dd741493d735a17716c26b"
                     : "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-    
+
                 const ERC20_ABI = [
                     "function transfer(address to, uint256 value) public returns (bool)",
                     "function decimals() view returns (uint8)"
@@ -209,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
                 const decimals = await usdc.decimals();
                 const amountToSend = ethers.parseUnits(amount.toString(), decimals);
-    
+
                 const tx = await usdc.transfer(recipient, amountToSend);
                 alert("Transaction sent! Awaiting confirmation...");
                 await tx.wait();
@@ -220,100 +224,105 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert("❌ Transaction failed: " + (err.shortMessage || err.message || err));
             }
         });
-    
-        // Post-insertion DOM bindings
+
+        bindModalValidation();
+    }
+    function bindModalValidation() {
         const recipientInput = document.getElementById('modal-recipient');
         const amountInput = document.getElementById('modal-amount');
         const feeDisplay = document.getElementById('fee-display');
         const totalDisplay = document.getElementById('total-display');
         const addressWarning = document.getElementById('address-warning');
-    
-        // Real-time validation
+        const amountWarning = document.getElementById('amount-warning');
+
+        // --- Address Input Validation ---
         recipientInput.addEventListener('input', () => {
             const addr = recipientInput.value.trim();
+            const hexPart = addr.slice(2);
+            const hexRegex = /^[0-9a-fA-F]*$/;
 
-            // NEW: Allow empty and single "0" as valid, don't show any error or border.
             if (!addr || addr === "0") {
                 recipientInput.style.border = "1px solid rgba(255,255,255,0.2)";
                 addressWarning.style.display = 'none';
                 return;
             }
-            const hexPart = addr.slice(2);
-            const hexRegex = /^[0-9a-fA-F]*$/;
-        
-            // Reset styles
+
             recipientInput.style.border = "1px solid rgba(255,255,255,0.2)";
             addressWarning.style.display = 'none';
-        
-            if (!addr) return;
-        
-            // Length check
-            if (addr.length > 42) {
+
+            if (addr.length > 42 || !addr.startsWith('0x') || !hexRegex.test(hexPart)) {
                 recipientInput.style.border = "2px solid #FF4D4D";
-                addressWarning.style.display = 'block';
                 addressWarning.textContent = "Invalid address.";
                 addressWarning.style.color = "#FF6666";
-                return;
-            }
-        
-            // Prefix check
-            if (!addr.startsWith('0x')) {
-                recipientInput.style.border = "2px solid #FF4D4D";
                 addressWarning.style.display = 'block';
-                addressWarning.textContent = "Invalid address.";
-                addressWarning.style.color = "#FF6666";
                 return;
             }
-        
-            // Character check
-            if (!hexRegex.test(hexPart)) {
-                recipientInput.style.border = "2px solid #FF4D4D";
-                addressWarning.style.display = 'block';
-                addressWarning.textContent = "Invalid address.";
-                addressWarning.style.color = "#FF6666";
-                return;
-            }
-        
-            // Valid format — check if high-risk pattern
-            const lowerAddr = addr.toLowerCase();
-            const highRisk = (
-                lowerAddr.startsWith('0x0000') ||
-                lowerAddr.startsWith('0xdead') ||
-                lowerAddr.startsWith('0x1111') ||
-                lowerAddr === '0x0000000000000000000000000000000000000000'
-            );
-        
+
+            const highRisk = /^0x(0000|dead|1111|0000000000000000000000000000000000000000)/i.test(addr);
             if (ethers.isAddress(addr)) {
                 recipientInput.style.border = highRisk ? "2px solid #FFA500" : "2px solid #30B886";
-                addressWarning.style.display = 'block';
-                addressWarning.textContent = highRisk ? "High-risk address." : "Valid address.";
+                addressWarning.textContent = highRisk ? "High-risk address." : "Valid address.*";
                 addressWarning.style.color = highRisk ? "#FFA500" : "#30B886";
-            } else {
-                recipientInput.style.border = "1px solid rgba(255,255,255,0.2)";
-                addressWarning.style.display = 'none';
+                addressWarning.style.display = 'block';
             }
         });
-    
+
+        // --- Amount Input Validation ---
         amountInput.addEventListener('input', () => {
-            const raw = parseFloat(amountInput.value.trim());
-            if (!isNaN(raw) && raw > 0) {
-                const fee = (raw * 0.01).toFixed(2);
-                const total = (raw + raw * 0.01).toFixed(2);
-                totalDisplay.textContent = parseFloat(total).toLocaleString();
-                feeDisplay.textContent = parseFloat(fee).toLocaleString();
-            } else {
-                totalDisplay.textContent = "—";
+            const rawInput = amountInput.value.trim();
+
+            if (/[a-df-zA-DF-Z]/.test(rawInput) || rawInput.startsWith('e') || rawInput.startsWith('E')) {
+                amountInput.style.border = "2px solid #FF4D4D";
+                amountWarning.textContent = "Invalid amount format.";
+                amountWarning.style.display = 'block';
                 feeDisplay.textContent = "—";
+                totalDisplay.textContent = "—";
+                return;
             }
+
+            const raw = parseFloat(rawInput);
+            if (isNaN(raw) || raw <= 0) {
+                amountInput.style.border = "2px solid #FF4D4D";
+                amountWarning.textContent = "Please enter a valid amount.";
+                amountWarning.style.display = 'block';
+                feeDisplay.textContent = "—";
+                totalDisplay.textContent = "—";
+                return;
+            }
+
+            const decimalPart = rawInput.split('.')[1];
+            if (decimalPart && decimalPart.length > 6) {
+                amountInput.style.border = "2px solid #FF4D4D";
+                amountWarning.textContent = "Too many decimal places.";
+                amountWarning.style.display = 'block';
+                return;
+            }
+
+            const fee = raw * 0.01;
+            const total = raw + fee;
+            const balance = window.currentUSDCBalance || 0;
+
+            if (total > balance) {
+                amountInput.style.border = "2px solid #FF4D4D";
+                amountWarning.textContent = "Amount exceeds wallet balance.";
+                amountWarning.style.color = "#FF4D4D";
+                amountWarning.style.display = 'block';
+            } else {
+                amountInput.style.border = "1px solid rgba(255,255,255,0.2)";
+                amountWarning.style.display = 'none';
+            }
+
+            feeDisplay.textContent = fee.toLocaleString(undefined, { maximumFractionDigits: 2 });
+            totalDisplay.textContent = total.toLocaleString(undefined, { maximumFractionDigits: 2 });
         });
     }
-
     // --- Modal Utility ---
     function showModal(messageHtml, onConfirm, onCancel) {
         const overlay = document.getElementById('modal-overlay');
         const msgDiv = document.getElementById('modal-message');
         const confirmBtn = document.getElementById('modal-confirm');
         const cancelBtn = document.getElementById('modal-cancel');
+
         msgDiv.innerHTML = messageHtml;
         overlay.style.display = 'flex';
 
@@ -325,16 +334,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function confirmHandler() {
             cleanup();
-            onConfirm && onConfirm();
+            if (onConfirm) onConfirm();
         }
 
         function cancelHandler() {
             cleanup();
-            onCancel && onCancel();
+            if (onCancel) onCancel();
         }
 
-        confirmBtn.onclick = confirmHandler;
-        cancelBtn.onclick = cancelHandler;
+        confirmBtn.addEventListener('click', confirmHandler);
+        cancelBtn.addEventListener('click', cancelHandler);
+
+        // Bind validation to modal inputs
+        bindModalValidation();
     }
 });
-

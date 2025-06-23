@@ -89,9 +89,10 @@
  text-align: center;
  font-size: 0.9rem;
  color: rgba(255,255,255,0.6);
- transition: opacity 0.5s;
+ transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
  margin-top: 0.5em;
 }
+
 
 #wallet-hint.visible {
     visibility: visible;
@@ -289,4 +290,11 @@
     font-size: 1.12rem;
     margin-bottom: 1.7rem;
     min-height: 1.4em;
+}
+
+.total-highlight {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #FFD53C;
+    margin-top: 0.4rem;
 }
