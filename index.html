@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
-    <link rel="stylesheet" href="styles/main.css" />
-    <link rel="stylesheet" href="styles/footer.css" />
-    <link rel="stylesheet" href="styles/modal.css" />
-    <link rel="stylesheet" href="styles/wallet.css" />
-    <title>ImplicitEx</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ImplicitEx</title>
+  <meta name="description" content="Send USDC peer-to-peer with transparent 1% fee using ImplicitEx. Simple, secure, wallet-to-wallet transactions.">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/footer.css" />
+  <link rel="stylesheet" href="styles/modal.css" />
+  <link rel="stylesheet" href="styles/wallet.css" />
 </head>
 <body>
-    <div class="page-container">
-        <main class="main-content">
-            <div class="logo-wrap">
-
+  <div class="page-container">
+    <main class="main-content">
+      <div class="logo-wrap">
+        
+                <!-- Brandmark -->
                 <div class="brandmark-svg">
                 <!-- ImplicitEx Brandmark Inline SVG -->
                 <svg class="brandmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" style="width: 100%; height: auto; max-width: 200px; display: block; margin: 0 auto;" fill="#F5F7FA">
@@ -44,89 +46,72 @@
                 fill="#F5F7FA" stroke="#F5F7FA" stroke-miterlimit="10" stroke-width="5"/></svg>
                 </div>
 
-            </div>
+                 </div>
 
-            <!-- End logo wrap -->
-
-            <h1 class="tagline">Send USDC with a 1% fee.</h1>
-
-            <div class="intro-text" style="max-width: 600px; margin: 0 auto 30px auto; text-align: center;">
-                <p style="font-size: 1.2rem; color: #F5F7FA; margin-bottom: 1rem;">
-                    Simple, secure person-to-person exchange. Move USDC directly between wallets. 
-                    No hidden fees. Just fast, transparent value exchange you can trust.
-                </p>
-            </div>
-
-            <!-- Button group for consistent spacing -->
-            <div class="button-group">
-                <button class="button" id="btn-connectwallet" aria-label="Connect your Ethereum wallet">Connect Wallet</button>
-                <div id="network-warning" style="color: #A61818; margin: 1em 0; min-height:1.5em; font-weight: 600"></div>
-            </div>
-
-            <!-- Feedback for wallet address -->
-            <div id="wallet-address">
-                <span class="wallet-label">Wallet:</span>
-                <span id="wallet-data"></span>
-            </div>
-            <div id="wallet-balances"></div>
-
-            <div id="send-widget">
-                <input id="recipient-address" type="text" placeholder="Recipient Wallet Address" autocomplete="off" />
-                <input id="send-amount" type="number" min="0" step="0.01" placeholder="Amount (USDC)" autocomplete="off" />
-                <button id="btn-send">Send USDC</button>
-                <div id="send-feedback" style="min-height:1.3em;margin-top:0.5em; color:#FFD35C;font-weight:600"></div>
-            </div>
-
-
-            <h2 id="countdown" style="margin-top:40px;">Launching in...</h2>
-        </main>
-        <div id="footer-placeholder"></div>
-    </div>
-    <script src="scripts/wallet.js"></script>
-    <div id="modal-overlay" class="modal-overlay" style="display:none;">
-        <div class="modal">
-          <div id="modal-message" class="modal-message"></div>
-          <div class="modal-actions">
-            <button id="modal-confirm" class="button btn-send">Confirm</button>
-            <button id="modal-cancel" class="button">Cancel</button>
-          </div>
-        </div>
+      <h1 class="tagline">Peer-to-Peer USDC transfers.</h1>
+      <div class="intro-text">
+        <p>Move USDC directly between wallets.</p>
       </div>
+
+      <div class="button-group">
+        <button id="btn-connect" aria-label="Connect your Ethereum wallet">Connect Wallet</button>
+        <button id="btn-create" aria-label="Create a new USDC transaction">Create Transaction</button>
+      </div>
+
+      <div id="wallet-hint" style="min-height: 1.5em; visibility: hidden; text-align: center; font-size: 0.9rem; color: rgba(255,255,255,0.6);">
+        Please connect your wallet first.
+      </div>
+
+      <div id="network-warning" style="color: #A61818; margin: 1em 0; min-height:1.5em; font-weight: 600;"></div>
+
+      <div id="wallet-address">
+        <span class="wallet-label">Wallet:</span>
+        <span id="wallet-data"></span>
+      </div>
+
+      <div id="wallet-balances"></div>
+      <h2 id="countdown">Launching in...</h2>
+    </main>
+
+    <div id="footer-placeholder"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal-overlay" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div id="modal-message" class="modal-message"></div>
+      <div class="modal-actions">
+        <button id="modal-confirm" class="button btn-send">Confirm</button>
+        <button id="modal-cancel" class="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/wallet.js"></script>
+  <script src="scripts/modal.js"></script>
+  <script>
+    const countdown = document.getElementById('countdown');
+    const targetDate = new Date("2025-06-30T00:00:00").getTime();
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const distance = targetDate - now;
+      if (distance <= 0) {
+        clearInterval(interval);
+        countdown.innerHTML = "Now Live!";
+        return;
+      }
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+
+    fetch('components/footer.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+      });
+  </script>
 </body>
-
-
-    <!-- Countdown Timer -->
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const countdown = document.getElementById('countdown');
-            const targetDate = new Date("2025-06-30T00:00:00").getTime();
-
-            const interval = setInterval(() => {
-                const now = Date.now();
-                const distance = targetDate - now;
-
-                if (distance <= 0) {
-                    clearInterval(interval);
-                    countdown.innerHTML = "Now Live!";
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            }, 1000);
-        });
-    </script>
-
-    <!-- Load Modular Footer -->
-    <script>
-        fetch('components/footer.html')
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            });
-    </script>
 </html>

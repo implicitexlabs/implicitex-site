@@ -43,7 +43,7 @@
     display: block;
 }
 .wordmark-svg {
-    width: clamp(180px, 90vw, 800px); /* Responsive sizing */
+    width: clamp(180px, 80vw, 800px); /* Responsive sizing */
     margin: 0 auto 0.7rem auto;
 }
 
@@ -86,9 +86,14 @@ h1 {
     margin: 40px auto 10px auto;
     max-width: 800px;
     padding: 0 1rem;
-    color: var(--white);
+    color: var(--teal);
 }
 
 #footer-placeholder {
     flex-shrink: 0;
 }
+
+/* Spinner animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+  }
