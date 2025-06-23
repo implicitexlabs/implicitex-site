@@ -83,12 +83,19 @@
   }
 
 #wallet-hint {
-    display: none;
-    margin-top: 0.5em;
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.6);
-    text-align: center;
-    transition: opacity 0.5s ease;
+ min-height: 1.5;
+ visibility: hidden;
+ opacity: 0;
+ text-align: center;
+ font-size: 0.9rem;
+ color: rgba(255,255,255,0.6);
+ transition: opacity 0.5s;
+ margin-top: 0.5em;
+}
+
+#wallet-hint.visible {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* Wallet address styling */

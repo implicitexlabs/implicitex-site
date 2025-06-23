@@ -139,11 +139,13 @@ document.addEventListener('DOMContentLoaded', function () {
     createBtn.addEventListener('click', () => {
         if (!fullWalletAddress) {
             const hint = document.getElementById('wallet-hint');
-            hint.style.display = 'block';
+            hint.style.visibility = 'visible';
+            hint.style.opacity = 1;
             hint.textContent = 'Please connect your wallet first.';
+            hint.classList.add('visible');
             return;
         }
-        document.getElementById('wallet-hint').style.display = 'none';
+        document.getElementById('wallet-hint').classList.remove =('visible');
         openTransactionModal();
     });
 
@@ -152,26 +154,27 @@ document.addEventListener('DOMContentLoaded', function () {
             <div style="margin-bottom: 1.1em;">
                 <label class="summary-label" for="modal-recipient">Recipient Address</label><br />
                 <input id="modal-recipient" type="text" placeholder="0x..."style="width: 100%; padding: 0.5em; margin-top: 0.3em;
-               font-family: 'Fira Mono', monospace; font-weight: 700; color: #000000;" />
+               font-family: 'Fira Mono', monospace; font-weight: 700; color: #0D1A2C;" />
                 <div id="address-warning" style="margin-top: 0.3em; font-size: 0.86rem; display: none;"></div>
             </div>
 
             <div style="margin-bottom: 1.1em;"><label class="summary-label" for="modal-amount">Amount (USDC)</label><br />
                 <input id="modal-amount" type="number" min="0" step="0.01" placeholder="e.g. 20.00" style="width: 100%; padding: 0.5em; margin-top: 0.3em;
-               font-family: 'Fira Mono', monospace; font-weight: 700; color: #F5F7FA;" />
+               font-family: 'Fira Mono', monospace; font-weight: 700; color: #0D1A2C;" />
             </div>
 
 
             <div class="modal-fee-summary">
                 <div>
-                    <span class="summary-label">Fee (1%):</span>
-                    <span class="summary-value" id="fee-display">—</span>
-                    <span class="summary-label">USDC</span>
-                </div>
-                <div>
                 <span class="summary-label">Total Cost:</span>
                 <span class="summary-value" id="total-display">—</span>
                 <span class="summary-label">USDC</span>
+                </div>
+
+                <div>
+                    <span class="summary-label">Fee (1%):</span>
+                    <span class="summary-value" id="fee-display">—</span>
+                    <span class="summary-label">USDC</span>
                 </div>
             </div>
             </div>
@@ -228,6 +231,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // Real-time validation
         recipientInput.addEventListener('input', () => {
             const addr = recipientInput.value.trim();
+
+            // NEW: Allow empty and single "0" as valid, don't show any error or border.
+            if (!addr || addr === "0") {
+                recipientInput.style.border = "1px solid rgba(255,255,255,0.2)";
+                addressWarning.style.display = 'none';
+                return;
+            }
             const hexPart = addr.slice(2);
             const hexRegex = /^[0-9a-fA-F]*$/;
         
@@ -287,13 +297,13 @@ document.addEventListener('DOMContentLoaded', function () {
         amountInput.addEventListener('input', () => {
             const raw = parseFloat(amountInput.value.trim());
             if (!isNaN(raw) && raw > 0) {
-                const fee = +(raw * 0.01).toFixed(2);
-                const total = +(raw + fee).toFixed(2);
-                feeDisplay.textContent = fee.toLocaleString();
-                totalDisplay.textContent = total.toLocaleString();
+                const fee = (raw * 0.01).toFixed(2);
+                const total = (raw + raw * 0.01).toFixed(2);
+                totalDisplay.textContent = parseFloat(total).toLocaleString();
+                feeDisplay.textContent = parseFloat(fee).toLocaleString();
             } else {
-                feeDisplay.textContent = "—";
                 totalDisplay.textContent = "—";
+                feeDisplay.textContent = "—";
             }
         });
     }
