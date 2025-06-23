@@ -9,6 +9,221 @@
     --red:      #A61818; /* Form Fields Only */
 }
 
+/* ===================== */
+/* === HEADER STYLES === */
+/* ===================== */
+
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;   /* was 100vw, now 100% */
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  z-index: 1000;
+  box-sizing: border-box;
+} 
+
+.top-nav-inner {
+  width: 100vw;
+  /* Remove or increase max-width for full stretch, or set to eg 1800px for large screens */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* The rest of your nav-left, nav-center, nav-right, .quick-links CSS stays the same */
+
+
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    /* ... */
+  }
+  
+  .nav-right {
+    position: absolute;
+    right: 1.5rem;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    flex-shrink: 0;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    padding-right: 1rem;
+  }
+  
+  .identity-wrap {
+    text-decoration: none;
+    display: block;
+  }
+  
+  .identity-flex {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem; /* spacing between brandmark and wordmark */
+    padding: 0.4rem 0.6rem;
+  }
+  
+  .mini-brandmark-icon {
+    width: 30px;
+    height: 30px;
+    fill: var(--teal);
+    flex-shrink: 0;
+  }
+  
+  .mini-wordmark-icon {
+    height: 40px;
+    width: auto;
+    fill: var(--teal);
+    opacity: 0.95;
+    flex-shrink: 1;
+  }
+
+  .quick-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* spacing between icons */
+  }
+
+  .quick-links a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 0.88rem;
+    opacity: 0.75;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+  
+  .quick-links a:hover {
+    color: var(--white);
+    opacity: 1;
+  }
+  
+  .social-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.75;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.2);
+    opacity: 1;
+    filter: drop-shadow(0 0 1px var(--white));
+  }
+
+/* Optional: Toggle Button for Background */
+.toggle-pattern {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: none;
+    color: var(--white);
+    border: 1px solid var(--white);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    z-index: 1100;
+    opacity: 0.7;
+}
+
+.toggle-pattern:hover {
+    opacity: 1;
+}
+
+
+/* ======================= */
+/* === BRANDING BLOCKS === */
+/* ======================= */
+
+
+
+.header-icons {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.header-icons a {
+    display: inline-block;
+    text-decoration: none;
+    line-height: 0;
+    margin: 0 0.5rem;
+}
+
+.header-icons img {
+    width: 25px;
+    height: 25px;
+    opacity: 0.75;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.header-icons img:hover {
+    transform: scale(1.2);
+    opacity: 1;
+    filter: drop-shadow(0 0 1px var(--white));
+}
+
+
+/* ======================= */
+/* === BACKGROUND GRID === */
+/* ======================= */
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -1; /* <- Change this to -1 */
+    pointer-events: none;
+    animation: drift 60s linear infinite;
+    opacity: 0.5;
+  }
+
+  
+
+body.no-pattern::before {
+    display: none;
+}
+
+@keyframes drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(40px, 40px); }
+}
+
+
+/* ===================== */
+/* === PAGE LAYOUT ==== */
+/* ===================== */
+
 .page-container {
     flex: 1 0 auto;
     display: flex;
@@ -21,9 +236,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Center vertically */
+    justify-content: center;
     width: 100%;
 }
+
+
+/* ===================== */
+/* === LOGO WRAP + HERO */
+/* ===================== */
 
 .logo-wrap {
     display: flex;
@@ -31,19 +251,22 @@
     align-items: center;
     margin: 0 auto;
     padding: 3rem 1rem 0 1rem;
+    margin-top: 80px; /* Push below fixed header */
 }
 
 .brandmark-svg {
     width: clamp(80px, 18vw, 150px);
     margin: 0 auto 1.1rem auto;
 }
+
 .brandmark-svg svg {
     width: 100%;
     height: auto;
     display: block;
 }
+
 .wordmark-svg {
-    width: clamp(180px, 80vw, 800px); /* Responsive sizing */
+    width: clamp(180px, 80vw, 800px);
     margin: 0 auto 0.7rem auto;
 }
 
@@ -53,7 +276,14 @@
     display: block;
 }
 
-html, body {
+
+/* ===================== */
+/* === BASE STYLES ===== */
+/* ===================== */
+
+  
+
+  html, body {
     margin: 0;
     padding: 0;
     background-color: var(--blue);
@@ -62,6 +292,8 @@ html, body {
     overflow-x: hidden;
     height: 100%;
     min-height: 100vh;
+    position: relative;
+    z-index: 0;
 }
 
 body {
@@ -74,11 +306,6 @@ body {
     display: flex;
 }
 
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
 h1 {
     font-size: clamp(2rem, 4vw, 2rem);
     font-weight: 750;
@@ -86,14 +313,36 @@ h1 {
     margin: 40px auto 10px auto;
     max-width: 800px;
     padding: 0 1rem;
-    color: var(--teal);
+    color: var(--white);
 }
 
 #footer-placeholder {
     flex-shrink: 0;
 }
 
-/* Spinner animation */
+
+/* ===================== */
+/* === KEYFRAMES ======= */
+/* ===================== */
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+@keyframes drift {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(60px, 60px); }
   }
+
+@media (max-width: 480px) {
+    .identity-flex {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+}
+  

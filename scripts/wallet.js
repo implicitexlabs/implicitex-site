@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Show Wallet Balances ---
     async function showBalances(address) {
         const balancesDiv = document.getElementById('wallet-balances');
-        balancesDiv.innerHTML = 'Fetching balances...';
+        balancesDiv.innerHTML = 'Retrieving balances...';
         let ethBal = "—";
         let usdcBal = "—";
         try {

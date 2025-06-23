@@ -3,14 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ImplicitEx</title>
-  <meta name="description" content="Send USDC peer-to-peer with transparent 1% fee using ImplicitEx. Simple, secure, wallet-to-wallet transactions.">
+  <title>Peer-to-Peer Transfers of USDC with Low Fees.</title>
+  <meta name="description" content="Send USDC peer-to-peer with transparent 1% fee using ImplicitEx.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://implicitex.com">
+  <meta property="og:title" content="ImplicitEx - Peer-to-Peer USDC Transfers">
+  <meta property="og:description" content="Transfer USDC wallet-to-wallet with ImplicitEx. Transparent 1% service fee. Simple. Secure. Powered by Web3">
+  <meta property="og:image" content="https://www.implicitex.com/assets/social-card.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="https://implicitex.com">
+  <meta name="twitter:title" content="ImplicitEx - Peer-to-Peer USDC Transfers">
+  <meta name="twitter:description" content="Wallet-to-wallet USDC transactions with a clear, simple 1% fee. Secure. Fast. Transparent.">
+  <meta name="twitter:image" content="https://implicitex.com/assets/social-card.jpg">
+
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="stylesheet" href="styles/footer.css" />
   <link rel="stylesheet" href="styles/modal.css" />
   <link rel="stylesheet" href="styles/wallet.css" />
+  
 </head>
+<header class="top-nav">
+  <div class="top-nav-inner">
+    <div class="nav-left">
+      <a href="/" class="identity-wrap" aria-label="Home">
+        <div class="identity-flex">
+        <svg class="mini-brandmark-icon" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+        <path d="M777.9,854.48L145.65,222.23l12.31-12.31,632.25,632.25s49.25,49.25,110.81-12.31c61.56-61.56,12.31-110.81,12.31-110.81L281.09,86.79l12.31-12.31,209.86,209.86,55.41-55.41,
+        154.97-154.97,12.31,12.31-210.38,210.38,123.13,123.13, 210.38-210.38,12.31,12.31-210.38,210.38,55.41,55.41,210.38-210.38s49.25-49.25-12.31-110.81c-61.56-61.56-110.81-12.31-110.81-12.31l-161.12,
+        161.12-12.31-12.31,161.12-161.12s49.25-49.25-12.31-110.81c-61.56-61.56-110.81-12.31-110.81-12.31l-154.97,154.97L348.81,19.07s-49.25-49.25-110.81,12.31c-61.56,61.56-12.31,110.81-12.31,
+        110.81l632.25,632.25-12.31,12.31L213.37,154.51s-49.25-49.25-110.81,12.31c-61.56,61.56-12.31,110.81-12.31,110.81l632.25,632.25-12.31,12.31-209.97-209.97-213.62,213.62-12.31-12.31,
+        213.62-213.62-123.13-123.13-213.62,213.62-12.31-12.31,213.62-213.62-55.41-55.41-213.62,213.62s-49.25,49.25,12.31,110.81c61.56,61.56,110.81,12.31,110.81,12.31l164.37-164.37,12.31,
+        12.31-164.37,164.37s-49.25,49.25,12.31,110.81c61.56,61.56,110.81,12.31,110.81,12.31l158.21-158.21,154.56,154.56s49.25,49.25,110.81-12.31c61.56-61.56,12.31-110.81,12.31-110.81Z" />
+      </svg>
+    </a>
+  </div>
+
+  <div class="nav-center">
+    <a href="/about" class="mini-wordmark-link" aria-label="About ImplicitEx">
+      <svg class="mini-wordmark-icon" viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="67.54 130.24 67.54 70.54 157.09 70.54 157.09 130.24 149.63 130.24 149.63 78 116.04 78 116.04 130.24 108.58 130.24 108.58 78 75 78 75 130.24 67.54 130.24" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><path d="M216.79,70.54v59.7h7.46v-29.85h52.24v-29.85h-59.7ZM269.03,92.92h-44.78v-14.93h44.78v14.93Z" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><polygon points="336.19 70.54 336.19 130.24 395.89 130.24 395.89 122.77 343.66 122.77 343.66 70.54 336.19 70.54" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><rect x="455.6" y="70.54" width="7.46" height="59.7" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><polygon points="522.76 70.54 522.76 130.24 582.46 130.24 582.46 122.77 530.22 122.77 530.22 78 582.46 78 582.46 70.54 522.76 70.54" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><polygon points="701.86 70.54 701.86 78 727.98 78 727.98 130.24 735.45 130.24 735.45 78 761.57 78 761.57 70.54 701.86 70.54" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><polygon points="821.27 70.54 880.97 70.54 880.97 78 828.73 78 828.73 96.66 880.97 96.66 880.97 104.12 828.73 104.12 828.73 122.77 880.97 122.77 880.97 130.24 821.27 130.24 821.27 70.54" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><rect x="634.7" y="70.54" width="7.46" height="59.7" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><rect x=".37" y="70.54" width="7.46" height="59.7" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><polygon points="1000.37 70.54 1000.37 81.73 981.72 100.39 1000.37 119.04 1000.37 130.24 970.52 100.39 1000.37 70.54" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/><polygon points="940.67 70.54 940.67 81.73 959.33 100.39 940.67 119.04 940.67 130.24 970.52 100.39 940.67 70.54" 
+          fill="#6699A1" stroke="#6699A1" stroke-miterlimit="10" stroke-width="5"/>
+      </svg>
+    </a>
+  </div>
+  <div class="nav-right">
+    <div class="quick-links">
+      <a href="https://github.com/implicitexlabs" target="_blank">
+        <img src="components/images/social/github.svg" class="social-icon" alt="GitHub" />
+      </a>
+      <a href="https://twitter.com/implicitexlabs" target="_blank">
+        <img src="components/images/social/twitter.svg" class="social-icon" alt="Twitter" />
+      </a>
+      <a href="mailto:team@implicitex.com" target="_blank">
+        <img src="components/images/social/email.svg" class="social-icon" alt="Contacts" />
+      </a>
+    </div>
+  </div>
+</header>
+
+
 <body>
   <div class="page-container">
     <main class="main-content">
@@ -48,9 +112,10 @@
 
                  </div>
 
-      <h1 class="tagline">Peer-to-Peer USDC transfers.</h1>
+      <h1 class="tagline">Send USDC Peer-to-Peer. One Percent Fee.</h1>
       <div class="intro-text">
-        <p>Move USDC directly between wallets.</p>
+        <p>ImplcitEx makes wallet-to-wallet USDC transfers simple, fast, and direct - with a transparent 1% fee.</p>
+        
       </div>
 
       <div class="button-group">
