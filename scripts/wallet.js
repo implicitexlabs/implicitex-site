@@ -167,14 +167,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     Transfer Fee (USDC): <span id="fee-display">—</span>
                 </div>
                 <br>
-                <div style="font-weight: bold; font-size: 1.3rem; margin-top: 0.3em; color: #FFD530;">
-                    Transfer Total (USDC): <span id="total-display">—</span>
+                <div style="font-weight: bold; font-size: 1rem; margin-top: 0.3em; color: #F5F7FA;">Transfer Total (USDC):
+                <div style="font-weight: bold; font-size: 1.5rem; margin-top: 0.3em; color: #FFD530;"><span id="total-display">—</span>
                 </div>
             </div>
-
-            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1.2em; text-align: center;">
-                By continuing, you agree to the <a href="terms.html" target="_blank" style="color: #FFD530; text-decoration: underline;">Terms of Use</a>.
-            </p>
         `;
 
         showModal(modalHtml, async () => {

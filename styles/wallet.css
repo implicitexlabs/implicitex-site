@@ -298,3 +298,8 @@
     color: #FFD53C;
     margin-top: 0.4rem;
 }
+
+.wallet-status {
+    margin-top: 2rem;
+    text-align: center;
+}

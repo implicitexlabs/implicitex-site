@@ -13,41 +13,17 @@
 /* === HEADER STYLES === */
 /* ===================== */
 
-.top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;   /* was 100vw, now 100% */
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  z-index: 1000;
-  box-sizing: border-box;
-} 
-
-.top-nav-inner {
-  width: 100vw;
-  /* Remove or increase max-width for full stretch, or set to eg 1800px for large screens */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 auto;
-  padding: 0 1rem;
-  box-sizing: border-box;
-}
 
 /* The rest of your nav-left, nav-center, nav-right, .quick-links CSS stays the same */
 
 
-  .top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    /* ... */
-  }
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;    /* <-- Fix: 100% of the containing block, matches body */
+  /* ... */
+}
   
   .nav-right {
     position: absolute;
@@ -154,12 +130,50 @@
     opacity: 1;
 }
 
+/* ======================== */
+/* === VERTICAL SPACING === */
+/* ======================== */
+
+.hero h1 {
+ margin-top: 6rem;
+ margin-bottom: 1.5rem;
+ font-size: 2rem;
+ text-align: center;
+}
+
+.hero p {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+
+.wallet-status {
+  margin-top: 2rem;
+}
 
 /* ======================= */
 /* === BRANDING BLOCKS === */
 /* ======================= */
 
+header {
+  background: rgba(10, 15, 20, 0.85); /* translucent */
+  backdrop-filter: blur(6px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  pointer-events: none; /* prevents interaction overlap */
+  }
 
+header * {
+  pointer-events: auto; /* restore interaction on child elements */
+}
 
 .header-icons {
     margin-bottom: 1rem;
@@ -190,6 +204,19 @@
     filter: drop-shadow(0 0 1px var(--white));
 }
 
+/* ========================= */
+/* === WALLET BUTTON ======= */
+/* ========================= */
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem auto;
+  max-width: 1000px;
+}
 
 /* ======================= */
 /* === BACKGROUND GRID === */
@@ -218,7 +245,6 @@ body.no-pattern::before {
     to { transform: translate(40px, 40px); }
 }
 
-
 /* ===================== */
 /* === PAGE LAYOUT ==== */
 /* ===================== */
@@ -238,7 +264,6 @@ body.no-pattern::before {
     justify-content: center;
     width: 100%;
 }
-
 
 /* ===================== */
 /* === LOGO WRAP + HERO */
@@ -275,12 +300,9 @@ body.no-pattern::before {
     display: block;
 }
 
-
 /* ===================== */
 /* === BASE STYLES ===== */
 /* ===================== */
-
-  
 
   html, body {
     margin: 0;
@@ -319,7 +341,6 @@ h1 {
     flex-shrink: 0;
 }
 
-
 /* ===================== */
 /* === KEYFRAMES ======= */
 /* ===================== */
@@ -343,5 +364,14 @@ h1 {
       padding-left: 0.5rem;
       padding-right: 0.5rem;
     }
+
+@media (max-width: 768px) {
+    .social-icons {
+      display: none;
+    }
+    .mobile-menu-toggle {
+      display: block;
+    }
+  }
 }
   
