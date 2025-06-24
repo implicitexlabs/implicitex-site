@@ -18,16 +18,14 @@
 
 
 .top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: center;
   width: 100%;    /* <-- Fix: 100% of the containing block, matches body */
   /* ... */
 }
   
   .nav-right {
     position: absolute;
-    right: 1.5rem;
+    right: 1rem;
     top: 0;
     height: 100%;
     display: flex;
@@ -57,22 +55,22 @@
   .identity-flex {
     display: flex;
     align-items: center;
-    gap: 0.6rem; /* spacing between brandmark and wordmark */
-    padding: 0.4rem 0.6rem;
+    gap: 0.5rem; /* spacing between brandmark and wordmark */
+    padding: 0.5rem 0.5rem;
   }
   
   .mini-brandmark-icon {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     fill: var(--teal);
     flex-shrink: 0;
   }
   
   .mini-wordmark-icon {
-    height: 40px;
+    height: 50px;
     width: auto;
     fill: var(--teal);
-    opacity: 0.95;
+    opacity: 1;
     flex-shrink: 1;
   }
 
@@ -85,8 +83,8 @@
   .quick-links a {
     color: var(--teal);
     text-decoration: none;
-    font-size: 0.88rem;
-    opacity: 0.75;
+    font-size: 1rem;
+    opacity: 0.50;
     white-space: nowrap;
     display: flex;
     align-items: center;
@@ -98,52 +96,32 @@
   }
   
   .social-icon {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     opacity: 0.75;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease;
   }
   
   .social-icon:hover {
-    transform: scale(1.2);
+    transform: scale(1.25);
     opacity: 1;
     filter: drop-shadow(0 0 1px var(--white));
   }
-
-/* Optional: Toggle Button for Background */
-.toggle-pattern {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    background: none;
-    color: var(--white);
-    border: 1px solid var(--white);
-    border-radius: 4px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 4px 8px;
-    z-index: 1100;
-    opacity: 0.7;
-}
-
-.toggle-pattern:hover {
-    opacity: 1;
-}
 
 /* ======================== */
 /* === VERTICAL SPACING === */
 /* ======================== */
 
 .hero h1 {
- margin-top: 6rem;
- margin-bottom: 1.5rem;
+ margin-top: 5rem;
+ margin-bottom: 1rem;
  font-size: 2rem;
  text-align: center;
 }
 
 .hero p {
   margin-bottom: 2rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -157,8 +135,6 @@
 /* ======================= */
 
 header {
-  background: rgba(10, 15, 20, 0.85); /* translucent */
-  backdrop-filter: blur(6px);
   position: fixed;
   top: 0;
   left: 0;
@@ -167,7 +143,6 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
   pointer-events: none; /* prevents interaction overlap */
   }
 
@@ -199,7 +174,7 @@ header * {
 }
 
 .header-icons img:hover {
-    transform: scale(1.2);
+    transform: scale(1.25);
     opacity: 1;
     filter: drop-shadow(0 0 1px var(--white));
 }
@@ -221,29 +196,9 @@ header * {
 /* ======================= */
 /* === BACKGROUND GRID === */
 /* ======================= */
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size: 40px 40px;
-    z-index: -1; /* <- Change this to -1 */
-    pointer-events: none;
-    animation: drift 60s linear infinite;
-    opacity: 0.5;
-  }
   
 
-body.no-pattern::before {
-    display: none;
-}
 
-@keyframes drift {
-    from { transform: translate(0, 0); }
-    to { transform: translate(40px, 40px); }
-}
 
 /* ===================== */
 /* === PAGE LAYOUT ==== */
@@ -274,12 +229,12 @@ body.no-pattern::before {
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    padding: 3rem 1rem 0 1rem;
-    margin-top: 80px; /* Push below fixed header */
+    padding: 2rem 1rem 0 1rem;
+    margin-top: 50px; /* Push below fixed header */
 }
 
 .brandmark-svg {
-    width: clamp(80px, 18vw, 150px);
+    width: clamp(50px, 25vw, 150px);
     margin: 0 auto 1.1rem auto;
 }
 
@@ -290,7 +245,7 @@ body.no-pattern::before {
 }
 
 .wordmark-svg {
-    width: clamp(180px, 80vw, 800px);
+    width: clamp(100px, 50vw, 500px);
     margin: 0 auto 0.7rem auto;
 }
 
@@ -330,11 +285,34 @@ body {
 h1 {
     font-size: clamp(2rem, 4vw, 2rem);
     font-weight: 750;
-    line-height: 1.2;
-    margin: 40px auto 10px auto;
+    line-height: 1;
+    margin: 25px auto 10px auto;
     max-width: 800px;
     padding: 0 1rem;
     color: var(--white);
+}
+
+
+.intro-text {
+  font-size: clamp(1rem, 1vw, 2rem);
+  font-weight: 500;
+  line-height: 1;
+  margin: 25px auto 10px auto;
+  max-width: 500px;
+  padding: 1 1rem;
+  color: var(--white);
+  line-height: normal;
+}
+
+h2 {
+  font-size: clamp(1rem, 1vw, 2rem);
+  font-weight:500;
+  line-height: 1;
+  margin: 25px auto 10px auto;
+  max-width: 500px;
+  padding: 1 1rem;
+  color: var(--red);
+  line-height: normal;
 }
 
 #footer-placeholder {
@@ -344,20 +322,6 @@ h1 {
 /* ===================== */
 /* === KEYFRAMES ======= */
 /* ===================== */
-
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-@keyframes drift {
-    from { transform: translate(0, 0); }
-    to   { transform: translate(60px, 60px); }
-  }
 
 @media (max-width: 480px) {
     .identity-flex {
@@ -374,4 +338,3 @@ h1 {
     }
   }
 }
-  

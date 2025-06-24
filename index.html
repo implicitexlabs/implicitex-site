@@ -1,30 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peer-to-Peer Transfers of USDC with Low Fees.</title>
-  <meta name="description" content="Send USDC peer-to-peer with transparent 1% fee using ImplicitEx.">
-
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://implicitex.com">
-  <meta property="og:title" content="ImplicitEx - Peer-to-Peer USDC Transfers">
-  <meta property="og:description" content="Transfer USDC wallet-to-wallet with ImplicitEx. Transparent 1% service fee. Simple. Secure. Powered by Web3">
-  <meta property="og:image" content="https://www.implicitex.com/assets/social-card.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:card" content="https://implicitex.com">
-  <meta name="twitter:title" content="ImplicitEx - Peer-to-Peer USDC Transfers">
-  <meta name="twitter:description" content="Wallet-to-wallet USDC transactions with a clear, simple 1% fee. Secure. Fast. Transparent.">
-  <meta name="twitter:image" content="https://implicitex.com/assets/social-card.jpg">
-
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
-  <link rel="stylesheet" href="styles/main.css" />
-  <link rel="stylesheet" href="styles/footer.css" />
-  <link rel="stylesheet" href="styles/modal.css" />
-  <link rel="stylesheet" href="styles/wallet.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-</head>
+    <title>ImplicitEx – Peer-to-Peer USDC Transfers with Low Fees</title>
+    <meta name="description" content="Send USDC peer-to-peer with a transparent 1% fee using ImplicitEx.">
+  
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://implicitex.com">
+    <meta property="og:title" content="ImplicitEx - Peer-to-Peer USDC Transfers">
+    <meta property="og:description" content="Transfer USDC wallet-to-wallet with ImplicitEx. Transparent 1% service fee. Simple. Secure. Powered by Web3.">
+    <meta property="og:image" content="https://www.implicitex.com/assets/social-card.jpg">
+  
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ImplicitEx - Peer-to-Peer USDC Transfers">
+    <meta name="twitter:description" content="Wallet-to-wallet USDC transactions with a clear, simple 1% fee. Secure. Fast. Transparent.">
+    <meta name="twitter:image" content="https://implicitex.com/assets/social-card.jpg">
+  
+    <!-- SEO / Browser / Device Metadata -->
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://implicitex.com/" />
+  
+    <!-- Icons -->
+    <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+  
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+  
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/footer.css" />
+    <link rel="stylesheet" href="styles/modal.css" />
+    <link rel="stylesheet" href="styles/wallet.css" />
+  
+    <!-- Ethers.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+  
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ImplicitEx",
+      "url": "https://implicitex.com",
+      "description": "Send USDC peer-to-peer with a transparent 1% fee. Wallet-to-wallet crypto payments. Secure. Simple. Built for Web3.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.0",
+        "priceCurrency": "USDC",
+        "description": "Transparent 1% transaction fee per USDC transfer"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ImplicitEx",
+        "url": "https://implicitex.com"
+      }
+    }
+    </script>
+  </head>
+  
 <header class="top-nav">
   <div class="top-nav-inner">
     <div class="nav-left">
@@ -62,13 +104,10 @@
   <div class="nav-right">
     <div class="quick-links">
       <a href="https://github.com/implicitexlabs" target="_blank">
-        <img src="components/images/social/github.svg" class="social-icon" alt="GitHub" />
-      </a>
-      <a href="https://twitter.com/implicitexlabs" target="_blank">
-        <img src="components/images/social/twitter.svg" class="social-icon" alt="Twitter" />
+        <img src="components/images/social/github.svg" class="social-icon" alt="ImplicitexLabs" />
       </a>
       <a href="mailto:team@implicitex.com" target="_blank">
-        <img src="components/images/social/email.svg" class="social-icon" alt="Email" />
+        <img src="components/images/social/github.svg" class="social-icon" alt="Connect" />
       </a>
     </div>
   </div>
@@ -83,7 +122,7 @@
                 <!-- Brandmark -->
                 <div class="brandmark-svg">
                 <!-- ImplicitEx Brandmark Inline SVG -->
-                <svg class="brandmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" style="width: 100%; height: auto; max-width: 200px; display: block; margin: 0 auto;" fill="#F5F7FA">
+                <svg class="brandmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" style="width: 100%; height: auto; max-width: 100px; display: block; margin: 0 auto;" fill="#F5F7FA">
                 <path d="M777.9,854.48L145.65,222.23l12.31-12.31,632.25,632.25s49.25,49.25,110.81-12.31c61.56-61.56,12.31-110.81,12.31-110.81L281.09,86.79l12.31-12.31,209.86,209.86,55.41-55.41,
                 154.97-154.97,12.31,12.31-210.38,210.38,123.13,123.13, 210.38-210.38,12.31,12.31-210.38,210.38,55.41,55.41,210.38-210.38s49.25-49.25-12.31-110.81c-61.56-61.56-110.81-12.31-110.81-12.31l-161.12,
                 161.12-12.31-12.31,161.12-161.12s49.25-49.25-12.31-110.81c-61.56-61.56-110.81-12.31-110.81-12.31l-154.97,154.97L348.81,19.07s-49.25-49.25-110.81,12.31c-61.56,61.56-12.31,110.81-12.31,
@@ -111,9 +150,10 @@
                 </div>
                 </div>
 
-      <h1 class="tagline">Send USDC Peer-to-Peer. One Percent Fee.</h1>
+                <h1 class="tagline">Send USDC. Wallet to Wallet. 1% Fee.</h1>
       <div class="intro-text">
-        <p>ImplcitEx makes wallet-to-wallet USDC transfers simple, fast, and direct - with a transparent 1% fee.</p>
+        <p>ImplicitEx lets you send USDC peer-to-peer with a flat 1% service fee. 
+          No extra tokens. No bloat. Just fast, secure transfers—built for Web3.</p>
       </div>
       <div class="button-group">
         <button id="btn-connect" aria-label="Connect your Ethereum wallet">Connect Wallet</button>
@@ -122,7 +162,6 @@
       <div id="wallet-hint" style="min-height: 1.5em; visibility: hidden; opacity: 0; transition: opacity 0.5s; text-align: center; font-size: 0.9rem; color: rgba(255,255,255,0.6);">
         Please connect your wallet.
       </div>
-      <div id="network-warning" style="color: #A61818; margin: 1em 0; min-height:1.5em; font-weight: 600;"></div>
       <div id="wallet-address">
         <span class="wallet-label">Wallet:</span>
         <span id="wallet-data"></span>
