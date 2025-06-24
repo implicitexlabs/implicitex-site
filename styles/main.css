@@ -1,122 +1,162 @@
+/* ===================== */
+/* === VARIABLE ROOT === */
+/* ===================== */
+
 :root {
-    /* Brand Palette, use these colors for ImplicitEx Brand */
-    --blue:     #0D1A2C;
-    --white:    #F5F7FA;
-    --teal:     #6699A1;
-    --green:    #30B886;
-    --grey:     #ADADAD;
-    --gold:     #FFD35C; /* Form Fields Only */
-    --red:      #A61818; /* Form Fields Only */
+  /* Brand Palette, use these colors for ImplicitEx Brand */
+  --blue:     #0D1A2C;
+  --white:    #F5F7FA;
+  --teal:     #6699A1;
+  --green:    #30B886;
+  --grey:     #ADADAD;
+  --gold:     #FFD35C; /* Form Fields Only */
+  --red:      #A61818; /* Form Fields Only */
+}
+
+/* ===================== */
+/* === BASE STYLES ===== */
+/* ===================== */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--blue);
+  font-family: 'Inter', Arial, sans-serif;
+  color: var(--white);
+  overflow-x: hidden;
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
+}
+
+body {
+  background: var(--blue);
+  color: var(--white);
+  text-align: center;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+}
+
+/* Financial Data Font Styling */
+#wallet-data,
+#wallet-balances,
+.wallet-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 /* ===================== */
 /* === HEADER STYLES === */
 /* ===================== */
 
-
-/* The rest of your nav-left, nav-center, nav-right, .quick-links CSS stays the same */
-
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
 
 .top-nav {
   position: center;
-  width: 100%;    /* <-- Fix: 100% of the containing block, matches body */
-  /* ... */
+  width: 100%;
 }
-  
-  .nav-right {
-    position: absolute;
-    right: 1rem;
-    top: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-  
-  .nav-left {
-    display: flex;
-    align-items: center;
-    padding-left: 1rem;
-    flex-shrink: 0;
-  }
 
-  .nav-right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-shrink: 0;
-    padding-right: 1rem;
-  }
-  
-  .identity-wrap {
-    text-decoration: none;
-    display: block;
-  }
-  
-  .identity-flex {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem; /* spacing between brandmark and wordmark */
-    padding: 0.5rem 0.5rem;
-  }
-  
-  .mini-brandmark-icon {
-    width: 25px;
-    height: 25px;
-    fill: var(--teal);
-    flex-shrink: 0;
-  }
-  
-  .mini-wordmark-icon {
-    height: 50px;
-    width: auto;
-    fill: var(--teal);
-    opacity: 1;
-    flex-shrink: 1;
-  }
+.nav-right {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 
-  .quick-links {
-    display: flex;
-    align-items: center;
-    gap: 1rem; /* spacing between icons */
-  }
+.nav-left {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  flex-shrink: 0;
+}
 
-  .quick-links a {
-    color: var(--teal);
-    text-decoration: none;
-    font-size: 1rem;
-    opacity: 0.50;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-  }
-  
-  .quick-links a:hover {
-    color: var(--white);
-    opacity: 1;
-  }
-  
-  .social-icon {
-    width: 25px;
-    height: 25px;
-    opacity: 0.75;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-  
-  .social-icon:hover {
-    transform: scale(1.25);
-    opacity: 1;
-    filter: drop-shadow(0 0 1px var(--white));
-  }
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  padding-right: 1rem;
+}
+
+.identity-wrap {
+  text-decoration: none;
+  display: block;
+}
+
+.identity-flex {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem;
+}
+
+.mini-brandmark-icon {
+  width: 25px;
+  height: 25px;
+  fill: var(--teal);
+  flex-shrink: 0;
+}
+
+.mini-wordmark-icon {
+  height: 50px;
+  width: auto;
+  fill: var(--teal);
+  opacity: 1;
+  flex-shrink: 1;
+}
+
+.quick-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quick-links a {
+  color: var(--teal);
+  text-decoration: none;
+  font-size: 1rem;
+  opacity: 0.50;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.quick-links a:hover {
+  color: var(--white);
+  opacity: 1;
+}
+
+.social-icon {
+  width: 25px;
+  height: 25px;
+  opacity: 0.75;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.25);
+  opacity: 1;
+  filter: drop-shadow(0 0 1px var(--white));
+}
 
 /* ======================== */
 /* === VERTICAL SPACING === */
 /* ======================== */
 
 .hero h1 {
- margin-top: 5rem;
- margin-bottom: 1rem;
- font-size: 2rem;
- text-align: center;
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
 }
 
 .hero p {
@@ -124,7 +164,6 @@
   font-size: 1rem;
   text-align: center;
 }
-
 
 .wallet-status {
   margin-top: 2rem;
@@ -143,40 +182,40 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  pointer-events: none; /* prevents interaction overlap */
-  }
+  pointer-events: none;
+}
 
 header * {
-  pointer-events: auto; /* restore interaction on child elements */
+  pointer-events: auto;
 }
 
 .header-icons {
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    padding: 0;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0;
 }
 
 .header-icons a {
-    display: inline-block;
-    text-decoration: none;
-    line-height: 0;
-    margin: 0 0.5rem;
+  display: inline-block;
+  text-decoration: none;
+  line-height: 0;
+  margin: 0 0.5rem;
 }
 
 .header-icons img {
-    width: 25px;
-    height: 25px;
-    opacity: 0.75;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+  width: 25px;
+  height: 25px;
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .header-icons img:hover {
-    transform: scale(1.25);
-    opacity: 1;
-    filter: drop-shadow(0 0 1px var(--white));
+  transform: scale(1.25);
+  opacity: 1;
+  filter: drop-shadow(0 0 1px var(--white));
 }
 
 /* ========================= */
@@ -193,31 +232,43 @@ header * {
   max-width: 1000px;
 }
 
+/* CTA Button */
+.btn-primary {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: var(--teal);
+  color: var(--blue);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
 /* ======================= */
-/* === BACKGROUND GRID === */
-/* ======================= */
-  
-
-
-
-/* ===================== */
 /* === PAGE LAYOUT ==== */
 /* ===================== */
 
 .page-container {
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .main-content {
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ===================== */
@@ -225,88 +276,66 @@ header * {
 /* ===================== */
 
 .logo-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    padding: 2rem 1rem 0 1rem;
-    margin-top: 50px; /* Push below fixed header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  padding: 2rem 1rem 0 1rem;
+  margin-top: 50px;
 }
 
 .brandmark-svg {
-    width: clamp(50px, 25vw, 150px);
-    margin: 0 auto 1.1rem auto;
+  width: clamp(50px, 25vw, 150px);
+  margin: 0 auto 1.1rem auto;
 }
 
 .brandmark-svg svg {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .wordmark-svg {
-    width: clamp(100px, 50vw, 500px);
-    margin: 0 auto 0.7rem auto;
+  width: clamp(100px, 50vw, 500px);
+  margin: 0 auto 0.7rem auto;
 }
 
 .wordmark-svg svg {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-/* ===================== */
-/* === BASE STYLES ===== */
-/* ===================== */
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--blue);
-    font-family: 'Inter', Arial, sans-serif;
-    color: var(--white);
-    overflow-x: hidden;
-    height: 100%;
-    min-height: 100vh;
-    position: relative;
-    z-index: 0;
-}
-
-body {
-    background: var(--blue);
-    color: var(--white);
-    text-align: center;
-    flex-direction: column;
-    min-height: 100vh;
-    height: 100%;
-    display: flex;
-}
-
-h1 {
-    font-size: clamp(2rem, 4vw, 2rem);
-    font-weight: 750;
-    line-height: 1;
-    margin: 25px auto 10px auto;
-    max-width: 800px;
-    padding: 0 1rem;
-    color: var(--white);
-}
-
-
-.intro-text {
-  font-size: clamp(1rem, 1vw, 2rem);
-  font-weight: 500;
-  line-height: 1;
-  margin: 25px auto 10px auto;
-  max-width: 500px;
-  padding: 1 1rem;
+h1.tagline {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
   color: var(--white);
-  line-height: normal;
+}
+
+.intro-text p {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--white);
+}
+
+.helper-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--teal);
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 h2 {
   font-size: clamp(1rem, 1vw, 2rem);
-  font-weight:500;
+  font-weight: 500;
   line-height: 1;
   margin: 25px auto 10px auto;
   max-width: 500px;
@@ -316,25 +345,21 @@ h2 {
 }
 
 #footer-placeholder {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
-/* ===================== */
-/* === KEYFRAMES ======= */
-/* ===================== */
-
 @media (max-width: 480px) {
-    .identity-flex {
+  .identity-flex {
       padding-left: 0.5rem;
       padding-right: 0.5rem;
-    }
+  }
+}
 
 @media (max-width: 768px) {
-    .social-icons {
+  .social-icons {
       display: none;
-    }
-    .mobile-menu-toggle {
+  }
+  .mobile-menu-toggle {
       display: block;
-    }
   }
 }

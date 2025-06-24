@@ -6,6 +6,9 @@
   
     <title>ImplicitEx – Peer-to-Peer USDC Transfers with Low Fees</title>
     <meta name="description" content="Send USDC peer-to-peer with a transparent 1% fee using ImplicitEx.">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -116,7 +119,7 @@
 
 <body>
   <div class="page-container">
-    <main class="main-content">
+    <main class="main-content" role="main">
       <div class="logo-wrap">
         
                 <!-- Brandmark -->
@@ -151,10 +154,11 @@
                 </div>
 
                 <h1 class="tagline">Send USDC. Wallet to Wallet. 1% Fee.</h1>
-      <div class="intro-text">
-        <p>ImplicitEx lets you send USDC peer-to-peer with a flat 1% service fee. 
-          No extra tokens. No bloat. Just fast, secure transfers—built for Web3.</p>
-      </div>
+                <div class="intro-text">
+                  <p>ImplicitEx lets you send USDC peer-to-peer with a flat 1% service fee. 
+                     No extra tokens. No bloat. Just fast, secure transfers — built for Web3.</p>
+                </div>
+      <p class="helper-text">To begin, connect your wallet and create a transaction.</p>
       <div class="button-group">
         <button id="btn-connect" aria-label="Connect your Ethereum wallet">Connect Wallet</button>
         <button id="btn-create" aria-label="Create a new USDC transaction">Create Transaction</button>
@@ -167,7 +171,7 @@
         <span id="wallet-data"></span>
       </div>
       <div id="wallet-balances"></div>
-      <h2 id="countdown">Launching in...</h2>
+      <h2 id="countdown" aria-live="polite">Launching in...</h2>
     </main>
     <div id="footer-placeholder"></div>
   </div>
