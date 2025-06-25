@@ -3,14 +3,24 @@
 /* ===================== */
 
 :root {
-  /* Brand Palette, use these colors for ImplicitEx Brand */
-  --blue:     #0D1A2C;
-  --white:    #F5F7FA;
-  --teal:     #6699A1;
-  --green:    #30B886;
-  --grey:     #ADADAD;
-  --gold:     #FFD35C; /* Form Fields Only */
-  --red:      #A61818; /* Form Fields Only */
+  /* Brand Palette */
+  --Brand01: #f2f7e2;
+  --Brand02: #ADADAD;
+  --Brand03: #5cc0ca;
+  --Brand04: #008080;
+  --Brand05: #0D1A2C;
+ 
+  /* Toggle & Widgets */
+  
+  --clr01: #848673;
+  --clr02: #42433a;
+  --clr03: #272823;
+  --clr04: #1e1f1c;
+
+  /* Form Field, Data Output & Errors */
+
+  --gold:#FFD35C;
+  --red: #A61818;
 }
 
 /* ===================== */
@@ -20,9 +30,9 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: var(--blue);
+  background-color: var(--Brand05);
   font-family: 'Inter', Arial, sans-serif;
-  color: var(--white);
+  color: var(--Brand05);
   overflow-x: hidden;
   height: 100%;
   min-height: 100vh;
@@ -31,8 +41,8 @@ html, body {
 }
 
 body {
-  background: var(--blue);
-  color: var(--white);
+  background: var(--Brand05);
+  color: var(--Brand05);
   text-align: center;
   flex-direction: column;
   min-height: 100vh;
@@ -102,14 +112,14 @@ html {
 .mini-brandmark-icon {
   width: 25px;
   height: 25px;
-  fill: var(--teal);
+  fill: var(--Brand01);
   flex-shrink: 0;
 }
 
 .mini-wordmark-icon {
   height: 50px;
   width: auto;
-  fill: var(--teal);
+  fill: var(--Brand01);
   opacity: 1;
   flex-shrink: 1;
 }
@@ -121,7 +131,7 @@ html {
 }
 
 .quick-links a {
-  color: var(--teal);
+  color: var(--Brand03);
   text-decoration: none;
   font-size: 1rem;
   opacity: 0.50;
@@ -131,7 +141,7 @@ html {
 }
 
 .quick-links a:hover {
-  color: var(--white);
+  color: var(--Brand01);
   opacity: 1;
 }
 
@@ -145,7 +155,7 @@ html {
 .social-icon:hover {
   transform: scale(1.25);
   opacity: 1;
-  filter: drop-shadow(0 0 1px var(--white));
+  filter: drop-shadow(0 0 1px var(--Brand01));
 }
 
 /* ======================== */
@@ -215,7 +225,7 @@ header * {
 .header-icons img:hover {
   transform: scale(1.25);
   opacity: 1;
-  filter: drop-shadow(0 0 1px var(--white));
+  filter: drop-shadow(0 0 1px var(--Brand03));
 }
 
 /* ========================= */
@@ -238,8 +248,8 @@ header * {
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  background-color: var(--teal);
-  color: var(--blue);
+  background-color: var(--Brand05);
+  color: var(--white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -295,6 +305,25 @@ header * {
   display: block;
 }
 
+/*Targeting the ImplicitEx brandmark.svg or its parts. */    
+.brandmark:hover path {
+  transition: fill 0.25s ease-in-out;
+    fill: #FFFFFF;
+}
+
+.logo-wrap svg:first-child {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+.logo-wrap svg:first-child:hover {
+  transform: scale(1.05);
+  opacity: 0.5;
+}
+
+.button:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
 .wordmark-svg {
   width: clamp(100px, 50vw, 500px);
   margin: 0 auto 0.7rem auto;
@@ -312,7 +341,7 @@ h1.tagline {
   text-align: center;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: var(--white);
+  color: var(--Brand01);
 }
 
 .intro-text p {
@@ -321,13 +350,13 @@ h1.tagline {
   margin: 0 auto 2rem;
   line-height: 1.5;
   text-align: center;
-  color: var(--white);
+  color: var(--Brand01);
 }
 
 .helper-text {
   font-size: 1rem;
   font-weight: 500;
-  color: var(--teal);
+  color: var(--Brand02);
   text-align: center;
   margin-top: 1rem;
   margin-bottom: 1.5rem;
@@ -340,7 +369,7 @@ h2 {
   margin: 25px auto 10px auto;
   max-width: 500px;
   padding: 1 1rem;
-  color: var(--red);
+  color: var(--Brand01);
   line-height: normal;
 }
 

@@ -1,13 +1,27 @@
+/* ===================== */
+/* === VARIABLE ROOT === */
+/* ===================== */
+
 :root {
-    /* Brand Palette, use these colors for ImplicitEx Brand */
-    --blue:     #0D1A2C;
-    --white:    #F5F7FA;
-    --teal:     #6699A1;
-    --green:    #30B886;
-    --grey:     #ADADAD;
-    --gold:     #FFD35C; /* Form Fields Only */
-    --red:      #A61818; /* Form Fields Only */
-}
+    /* Brand Palette */
+    --Brand01: #f2f7e2;
+    --Brand02: #ADADAD;
+    --Brand03: #5cc0ca;
+    --Brand04: #008080;
+    --Brand05: #0D1A2C;
+   
+    /* Toggle & Widgets */
+    
+    --clr01: #848673;
+    --clr02: #42433a;
+    --clr03: #272823;
+    --clr04: #1e1f1c;
+  
+    /* Form Field, Data Output & Errors */
+  
+    --gold:#FFD35C;
+    --red: #A61818;
+  }
 
 /* Button group for clean alignment */
 .button-group {
@@ -19,9 +33,9 @@
 
 /* Remove individual button margin-top if using button-group */
 .button, button {
-    background: var(--green);          /* ImplicitEx brand green */
-    color: var(--blue);
-    border: 1px solid var(--white);
+    background: var(--Brand05);          /* ImplicitEx brand green */
+    color: var(--Brand01);
+    border: 1px solid var(--Brand01);
     padding: 0.85rem 2.1rem;
     font-size: 1rem;
     font-weight: 600;
@@ -34,25 +48,25 @@
 
 /* Hover effect */
 .button:hover, button:hover {
-    background: var(--green);
-    transform: scale(1.04);
+    background: var(--Brand05);
+    transform: scale(1.125);
 }
 
 /* Variant for Send / Confirm */
 .btn-send {
-    background: var(--green);
-    color: var(--blue);
-    border: 1px solid var(--white);
+    background: var(--Brand05);
+    color: var(--Brand01);
+    border: 1px solid var(--Brand01);
     box-shadow: none;
 }
 
 .btn-send:hover {
-    background: var(--green);
+    background: var(--Brand02);
     transform: scale(1.04);
 }
 
 .button:disabled {
-    background: #444;
+    background: var(--Brand04);
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -76,10 +90,10 @@
     transform: translateY(-50%);
     width: 1em;
     height: 1em;
-    border: 2px solid var(--white);
+    border: 2px solid var(--Brand01);
     border-top: 2px solid transparent;
     border-radius: 50%;
-    animation: spin 0.6s linear infinite;
+    animation: spin 0.5s linear infinite;
   }
 
 #wallet-hint {
@@ -88,11 +102,10 @@
  opacity: 0;
  text-align: center;
  font-size: 0.9rem;
- color: rgba(255,255,255,0.6);
+ color: var(--Brand02);
  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
  margin-top: 0.5em;
 }
-
 
 #wallet-hint.visible {
     visibility: visible;
@@ -103,7 +116,7 @@
 
 .wallet-label,
 .balance-label {
-    color: var(--green);
+    color: var(--Brand02);
     font-weight: 700;
     font-size: 1.07rem;
     font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
@@ -113,7 +126,7 @@
 
 #wallet-data,
 .balance-value {
-    color: var(--gold);
+    color: var(--Brand03);
     font-weight: 400;
     font-size: 1.07rem;
     font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
@@ -125,8 +138,8 @@
     align-items: center;
     justify-content: flex-start;
     margin: 2.2rem auto 0 auto;
-    color: #30B886;
-    background: rgba(245, 247, 250, 0.12);
+    color: var(--Brand03);
+    background: var(--Brand05);
     font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
     border-radius: 14px;
     font-size: 1.1rem;
@@ -134,8 +147,7 @@
     max-width: 98vw; /* Nearly full viewport width */
     min-width: 220px;
     min-height: 38px;
-    box-shadow: 0 4px 28px 0 #12FF9940 0 1.5px 8px 0 #0002;
-    border: 1.7px solid #30B88640;
+    border: 1px solid var(--Brand01);
     letter-spacing: 0.03em;
     font-weight: 500;
     background-clip: padding-box;
@@ -150,19 +162,19 @@
 }
 
 #wallet-address::-webkit-scrollbar-thumb {
-    background: #444a;
+    background: var(--Brand05);
     border-radius: 10px;
 }
 
 #wallet-address span#wallet-data:empty::after {
     content: "Not connected";
-    color: var(--grey);
+    color: var(--Brand02);
     font-style: italic;
 }
 
 #wallet-address span#wallet-data {
     margin-left: 0.5em;
-    color: var(--white);
+    color: var(--Brand01);
     font-weight: 600;
     letter-spacing: 0.04em;
     transition: color 0.12s, background 0.16s;
@@ -180,16 +192,16 @@
     align-items: center;
     gap: 10px;
     font-family: monospace;
-    background: var(--blue);
+    background: var(--Brand05);
     padding: 10px 20px;
     border-radius: 6px;
-    color: var(--white);
+    color: var(--Brand01);
     width: fit-content;
 }
 
 .copy-btn {
-    background:  var(--green);
-    color: var(--white);
+    background:  var(--Brand04);
+    color: var(--Brand01);
     border: none;
     padding: 6px 14px;
     border-radius: 4px;
@@ -199,13 +211,13 @@
 }
 
 .copy-btn:hover, .copy-btn:focus {
-    background: var(--green);
+    background: var(--Brand04);
 }
 
 .copy-status {
     margin-left: 10px;
     font-size: 0.9em;
-    color: var(--green);
+    color: var(--Brand04);
     min-width: 60px;
     transition: opacity 0.2s;
     opacity: 0;
@@ -218,7 +230,7 @@
   font-weight: 700;
   font-size: 1.08rem;
   opacity: 0;
-  transition: opacity 0.44s cubic-bezier(.4,0,.2,1);
+  transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
   pointer-events: none;
   white-space: nowrap; /* Never break "Copied!" */
 }
@@ -237,8 +249,8 @@
 }
 
 #wallet-address span#wallet-data.revealed {
-    background: var(--blue);
-    color: var(--yellow);
+    background: var(--Brand05);
+    color: var(--gold);
     border-radius: 6px;
     padding: 0.08em 0.38em;
     transition: background 0.2s, color 0.16s;
@@ -251,17 +263,17 @@
 
 #wallet-address span#wallet-data.copied {
     animation: copied-bounce 0.7s cubic-bezier(.21,1.5,.82,1);
-    background: #FFD35C;
+    background: var(--gold);
     color: #0D1A2C !important;
 }
 
 @keyframes copied-bounce {
-    0%      { transform: scale(1); background: #FFD35C; }
+    0%      { transform: scale(1); background: var(--gold); }
     20%     { transform: scale(1.12); }
     45%     { transform: scale(0.95); }
     60%     { transform: scale(1.04); }
     80%     { transform: scale(0.98); }
-    100%    { transform: scale(1); background: #FFD35C;}
+    100%    { transform: scale(1); background: var(--gold);}
 }
 
 @keyframes fadeinCard {
@@ -272,20 +284,22 @@
 
 #wallet-balances {
     font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-    background: rgba(245, 247, 250, 0.07);
+    background: var(--Brand05);
     border-radius: 8px;
     padding: 0.45em 1em;
-    color: #FFD35C;
+    color: var(--Brand03);
     font-size: 1.08rem;
     margin-top: 0.7rem;
     display: inline-block;
     min-width: 16px;
-    box-shadow: 0 2px 8px #0D1A2C11;
+    height: 1em;
+    border: 2px solid var(--Brand01);
+    border-radius: 6px;
 }
 
 /* USDC balance styling */
 #usdc-balance {
-    color: var(--yellow);
+    color: var(--Brand04);
     font-weight: 700;
     font-size: 1.12rem;
     margin-bottom: 1.7rem;
@@ -295,7 +309,7 @@
 .total-highlight {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #FFD53C;
+    color: var(--gold);
     margin-top: 0.4rem;
 }
 

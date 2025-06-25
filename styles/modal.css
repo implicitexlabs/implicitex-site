@@ -1,3 +1,28 @@
+/* ===================== */
+/* === VARIABLE ROOT === */
+/* ===================== */
+
+:root {
+  /* Brand Palette */
+  --Brand01: #f2f7e2;
+  --Brand02: #ADADAD;
+  --Brand03: #5cc0ca;
+  --Brand04: #008080;
+  --Brand05: #0D1A2C;
+ 
+  /* Toggle & Widgets */
+  
+  --clr01: #848673;
+  --clr02: #42433a;
+  --clr03: #272823;
+  --clr04: #1e1f1c;
+
+  /* Form Field, Data Output & Errors */
+
+  --gold:#FFD35C;
+  --red: #A61818;
+}
+
 .modal-overlay {
   position: fixed;
   z-index: 1002;
@@ -15,14 +40,14 @@
 }
 
 .modal {
-  background: var(--blue, #0D1A2C);
-  border: 1.5px solid rgba(255, 255, 255, 0.1); /* subtle stroke */
+  background: var(--Brand05);
+  border:1px solid var(--Brand01); /* subtle stroke */
   border-radius: 16px;
   max-width: 92vw;
   width: 375px;
   padding: 2rem 1.7rem 1.7rem 1.7rem;
   text-align: center;
-  color: var(--white, #F5F7FA);
+  color: var(--Brand01);
   box-shadow: none;
 }
 
@@ -44,20 +69,20 @@
   font-size: 1rem;
   font-weight: 600;
   border-radius: 6px;
-  border: 1px solid var(--white);
+  border: 1px solid var(--Brand01);
   font-family: 'Inter', Arial, sans-serif;
   text-transform: uppercase;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 #modal-confirm {
-  background: var(--green);
-  color: var(--blue);
+  background: var(--Brand05);
+  color: var(--Brand01);
 }
 
 #modal-cancel {
-  background: var(--teal); /* #6699A1 */
-  color: var(--blue);
+  background: var(--Brand05);
+  color: var(--Brand01);
 }
 
 #modal-confirm:hover,
@@ -77,14 +102,14 @@
 }
 
 .summary-label {
-  color: var(--white);
+  color: var(--Brand01);
   font-weight: 700;
   font-size: 0.86rem;
   font-family: 'Inter', Arial, sans-serif;
 }
 
 .summary-value {
-  color: var(--gold);
+  color: var(--Brand01);
   font-family: 'Fira Mono', 'Consolas', monospace;
   font-size: 1rem;
   margin: 0 0.3em;
@@ -93,16 +118,16 @@
 .modal-fee-summary .summary-label {
   font-size: 0.85rem;
   opacity: 0.8;
-  color: #ADADAD;
+  color: var(--Brand02);
 }
 
 .modal-fee-summary .summary-value {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #F5F7FA;
+  color: var(--Brand01);
 }
 
 .total-highlight {
-  color: var(--gold);
+  color: var(--Brand01);
   font-size: 1.3rem;
 }

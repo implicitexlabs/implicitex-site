@@ -1,20 +1,37 @@
+/* ===================== */
+/* === VARIABLE ROOT === */
+/* ===================== */
+
 :root {
-    --charcoal-blue: #0D1A2C;
-    --cloud-white: #F5F7FA;
-    --slate-teal: #6699A1;
-    --signal-green: #30B886;
-    --sunset-yellow: #FFD35C;
-    }
+    /* Brand Palette */
+    --Brand01: #f2f7e2;
+    --Brand02: #ADADAD;
+    --Brand03: #5cc0ca;
+    --Brand04: #008080;
+    --Brand05: #0D1A2C;
+   
+    /* Toggle & Widgets */
+    
+    --clr01: #848673;
+    --clr02: #42433a;
+    --clr03: #272823;
+    --clr04: #1e1f1c;
+  
+    /* Form Field, Data Output & Errors */
+  
+    --gold:#FFD35C;
+    --red: #A61818;
+  }
     
     .footer {
 
 
-    background-color: var(--slate-teal);
+    background-color: var(--Brand01);
     text-align: center;
     padding: 2rem 1rem;
-    color: var(--cloud-white);
+    color: var(--Brand05);
     font-size: 0.875rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid #f2f7e2;
     flex-shrink: 0;
 }
 
@@ -23,7 +40,7 @@
 }
 
 .footer-links a {
-    color: var(--charcoal-blue);
+    color: var(--Brand05);
     text-decoration: none;
     margin: 0.04rem;
     opacity: 0.8;
@@ -31,7 +48,7 @@
 
 .footer-links a:hover {
     opacity: 1;
-    color: var(--slate-teal);
+    color: var(--Brand03);
 }
 
 .social-icons {
@@ -60,7 +77,7 @@
 .social-icons img:hover {
     transform: scale(1.2);
     opacity: 1;
-    filter: drop-shadow(0 0 1px var(--signal-green));
+    filter: drop-shadow(0 0 1px var(--Brand02));
 }
 
 .footer .copyright {
