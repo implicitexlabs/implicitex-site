@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return addr.slice(0, 6) + "..." + addr.slice(-4);
     }
 
+    function isValidEmail(email) {
+        const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
+        return pattern.test(email) && email.length <= 254;
+    }
+
     const alchemyProvider = new ethers.JsonRpcProvider("https://eth-mainnet.g.alchemy.com/v2/tNw9iRsScHuuRi9OzxX1lGHx83a3UNmt");
     const sepoliaProvider = new ethers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/tNw9iRsScHuuRi9OzxX1lGHx83a3UNmt");
 
@@ -46,10 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
         window.currentUSDCBalance = parseFloat(ethers.formatUnits(raw, decimals));
         const usdcBal = window.currentUSDCBalance.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
-        const addrField = document.getElementById('modal-wallet-address');
-        const balanceField = document.getElementById('modal-wallet-balances');
-        if (addrField) addrField.textContent = shortenAddress(address);
-        if (balanceField) balanceField.textContent = `USDC: ${usdcBal} | ETH: ${ethBal}`;
+        document.getElementById('modal-wallet-address').textContent = shortenAddress(address);
+        document.getElementById('modal-wallet-balances').textContent = `USDC: ${usdcBal} | ETH: ${ethBal}`;
     }
 
     connectBtn.addEventListener('click', async () => {
@@ -103,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <div class="modal-input-block">
                 <label class="summary-label" for="modal-recipient">Recipient Address</label>
-                <input id="modal-recipient" type="text" class="modal-input" placeholder="0x..." />
+                <input id="modal-recipient" type="text" class="modal-input" placeholder="0x..." readonly value="0x0000000000000000000000000000000000000000" />
                 <div id="address-warning" class="hint"></div>
 
                 <label class="summary-label" for="modal-amount">Amount (USDC)</label>
@@ -114,14 +117,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div>Transfer Fee (USDC): <span id="fee-display">—</span></div>
                     <div>Transfer Total (USDC): <span id="total-display" class="total-highlight">—</span></div>
                 </div>
+
+                <div class="email-toggle-block">
+                    <label><input type="checkbox" id="email-receipt-toggle" /> <span>📧 Email me a receipt</span></label>
+                    <input type="email" id="email-input" class="modal-input" placeholder="you@example.com" />
+                </div>
+
+                <div class="modal-branding">
+                    <img src="logo.svg" class="modal-logo" alt="ImplicitEx" />
+                    <img src="brandmark.svg" class="modal-brandmark" alt="Brandmark" />
+                </div>
             </div>
         `;
 
         showModal(modalHtml, async () => {
-            const recipient = document.getElementById('modal-recipient').value.trim();
             const amount = parseFloat(document.getElementById('modal-amount').value.trim());
-            if (!ethers.isAddress(recipient)) return alert("Invalid address.");
+            const email = document.getElementById('email-input').value.trim();
+            const emailToggle = document.getElementById('email-receipt-toggle');
+
             if (isNaN(amount) || amount <= 0) return alert("Invalid amount.");
+            if (emailToggle.checked && !isValidEmail(email)) return alert("❌ Invalid email address.");
+
             const total = amount + amount * 0.01;
             if (total > (window.currentUSDCBalance || 0)) return alert("Insufficient USDC.");
 
@@ -138,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ], signer);
                 const decimals = await usdc.decimals();
                 const value = ethers.parseUnits(amount.toString(), decimals);
-                const tx = await usdc.transfer(recipient, value);
+                const tx = await usdc.transfer("0x0000000000000000000000000000000000000000", value);
                 alert("Transaction sent...");
                 await tx.wait();
                 alert("✅ Confirmed!");
@@ -148,47 +164,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        bindModalValidation();
+        setTimeout(() => {
+            const emailToggle = document.getElementById('email-receipt-toggle');
+            const emailInput = document.getElementById('email-input');
+            emailToggle.addEventListener('change', () => {
+                emailInput.style.display = emailToggle.checked ? 'block' : 'none';
+            });
+        }, 250);
     });
-
-    function bindModalValidation() {
-        const recipientInput = document.getElementById('modal-recipient');
-        const amountInput = document.getElementById('modal-amount');
-        const feeDisplay = document.getElementById('fee-display');
-        const totalDisplay = document.getElementById('total-display');
-        const addressWarning = document.getElementById('address-warning');
-        const amountWarning = document.getElementById('amount-warning');
-
-        recipientInput.addEventListener('input', () => {
-            const addr = recipientInput.value.trim();
-            if (!addr.startsWith('0x') || addr.length !== 42) {
-                addressWarning.textContent = "Invalid Ethereum address.";
-                recipientInput.style.border = "2px solid #FF4D4D";
-            } else {
-                addressWarning.textContent = "";
-                recipientInput.style.border = "";
-            }
-        });
-
-        amountInput.addEventListener('input', () => {
-            const val = parseFloat(amountInput.value.trim());
-            if (isNaN(val) || val <= 0) {
-                amountWarning.textContent = "Please enter a valid amount.";
-                return;
-            }
-
-            const fee = val * 0.01;
-            const total = val + fee;
-            feeDisplay.textContent = fee.toFixed(2);
-            totalDisplay.textContent = total.toFixed(2);
-
-            if (total > (window.currentUSDCBalance || 0)) {
-                amountWarning.textContent = "Amount exceeds balance.";
-            } else {
-                amountWarning.textContent = "1% fee applied.";
-            }
-        });
-    }
 
     function showModal(html, onConfirm, onCancel) {
         const overlay = document.getElementById('modal-overlay');
@@ -216,8 +199,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
         confirmBtn.addEventListener('click', confirmHandler);
         cancelBtn.addEventListener('click', cancelHandler);
-
-        bindModalValidation();
-        showBalances(fullWalletAddress); // trigger balance update inside modal
     }
 });

@@ -17,7 +17,30 @@
     --clr03: #272823;
     --clr04: #1e1f1c;
   
-    /* Form Field, Data Output & Errors */
+    
+  --font-ui: 'Inter', sans-serif;
+  --font-mono: 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
+
+  /* Font Sizes */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-xxl: 2rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+
+  /* Border Strokes */
+  --stroke-light: 1px solid var(--Brand01);
+  --stroke-strong: 2px solid var(--Brand01);
+
+  /* Form Field, Data Output & Errors */
   
     --gold:#FFD35C;
     --red: #A61818;
@@ -35,15 +58,15 @@
 .button, button {
     background: var(--Brand05);          /* ImplicitEx brand green */
     color: var(--Brand01);
-    border: 1px solid var(--Brand01);
+    border: 2px solid var(--Brand01);
     padding: 0.85rem 2.1rem;
-    font-size: 1rem;
+    font-size: var(--fs-base);
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     text-transform: uppercase;
     transition: background 0.2s ease, transform 0.2s ease;
-    box-shadow: none;                  /* 🔥 REMOVE SHADOW */
+    box-shadow: none;                  /* ðŸ”¥ REMOVE SHADOW */
 }
 
 /* Hover effect */
@@ -119,7 +142,7 @@
     color: var(--Brand02);
     font-weight: 700;
     font-size: 1.07rem;
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-family: var(--font-mono);
     letter-spacing: 0.03em;
     margin-right: 0.35em;
 }
@@ -129,7 +152,7 @@
     color: var(--Brand03);
     font-weight: 400;
     font-size: 1.07rem;
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-family: var(--font-mono);
     letter-spacing: 0.02em;
 }
 
@@ -140,14 +163,14 @@
     margin: 2.2rem auto 0 auto;
     color: var(--Brand03);
     background: var(--Brand05);
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-    border-radius: 14px;
+    font-family: var(--font-mono);
+    border-radius: var(--radius-md);
     font-size: 1.1rem;
     padding: 0.9rem 1.5rem;
     max-width: 98vw; /* Nearly full viewport width */
     min-width: 220px;
     min-height: 38px;
-    border: 1px solid var(--Brand01);
+    border: 5px solid var(--Brand01);
     letter-spacing: 0.03em;
     font-weight: 500;
     background-clip: padding-box;
@@ -163,7 +186,7 @@
 
 #wallet-address::-webkit-scrollbar-thumb {
     background: var(--Brand05);
-    border-radius: 10px;
+    border-radius: none;
 }
 
 #wallet-address span#wallet-data:empty::after {
@@ -194,7 +217,7 @@
     font-family: monospace;
     background: var(--Brand05);
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 2px;
     color: var(--Brand01);
     width: fit-content;
 }
@@ -204,7 +227,7 @@
     color: var(--Brand01);
     border: none;
     padding: 6px 14px;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     font-size: 0.96em;
     transition: background 0.18s;
@@ -251,7 +274,7 @@
 #wallet-address span#wallet-data.revealed {
     background: var(--Brand05);
     color: var(--gold);
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     padding: 0.08em 0.38em;
     transition: background 0.2s, color 0.16s;
 }
@@ -283,7 +306,7 @@
 
 
 #wallet-balances {
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-family: var(--font-mono);
     background: var(--Brand05);
     border-radius: 8px;
     padding: 0.45em 1em;
@@ -294,7 +317,7 @@
     min-width: 16px;
     height: 1em;
     border: 2px solid var(--Brand01);
-    border-radius: 6px;
+    border-radius: var(--radius-md);
 }
 
 /* USDC balance styling */
