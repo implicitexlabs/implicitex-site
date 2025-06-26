@@ -17,7 +17,30 @@
   --clr03: #272823;
   --clr04: #1e1f1c;
 
-  /* Form Field, Data Output & Errors */
+  
+--font-ui: 'Inter', sans-serif;
+--font-mono: 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
+
+/* Font Sizes */
+--fs-xs: 0.75rem;
+--fs-sm: 0.875rem;
+--fs-base: 1rem;
+--fs-md: 1.125rem;
+--fs-lg: 1.25rem;
+--fs-xl: 1.5rem;
+--fs-xxl: 2rem;
+
+/* Border Radius */
+--radius-sm: 4px;
+--radius-md: 6px;
+--radius-lg: 8px;
+--radius-xl: 16px;
+
+/* Border Strokes */
+--stroke-light: 1px solid var(--Brand01);
+--stroke-strong: 2px solid var(--Brand01);
+
+/* Form Field, Data Output & Errors */
 
   --gold:#FFD35C;
   --red: #A61818;
