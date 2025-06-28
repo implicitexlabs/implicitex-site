@@ -1,103 +1,54 @@
-/* ===================== */
-/* === VARIABLE ROOT === */
-/* ===================== */
-:root {
-    /* Brand Palette */
-    --Brand01: #f2f7e2;
-    --Brand02: #ADADAD;
-    --Brand03: #5cc0ca;
-    --Brand04: #008080;
-    --Brand05: #0D1A2C;
-  
-    --clr01: #848673;
-    --clr02: #42433a;
-    --clr03: #272823;
-    --clr04: #1e1f1c;
-  
-    --font-sans: 'Inter', Arial, sans-serif;
-    --font-mono: 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
-  
-    /* Font Sizes */
-    --fs-xs: 0.75rem;
-    --fs-sm: 0.875rem;
-    --fs-base: 1rem;
-    --fs-md: 1.125rem;
-    --fs-lg: 1.25rem;
-    --fs-xl: 1.5rem;
-    --fs-xxl: 2rem;
-  
-    /* Border Radius */
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-    --radius-xl: 16px;
-  
-    /* Border Strokes */
-    --stroke-light: 1px solid var(--Brand01);
-    --stroke-strong: 2px solid var(--Brand01);
-  
-    --gold: #FFD35C;
-    --red: #A61818;
-  }
-    
-    .footer {
-
-
+.footer {
     background-color: var(--Brand01);
     text-align: center;
     padding: 2rem 1rem;
     color: var(--Brand05);
-    font-size: 0.875rem;
-    border-top: 1px solid #f2f7e2;
+    border-top: var(--stroke-light);
     flex-shrink: 0;
-}
-
-.footer-links {
+    /* Typography (font-family, etc.) comes from main.css! */
+  }
+  
+  .footer-links {
     margin-bottom: 1rem;
-}
-
-.footer-links a {
-    color: var(--Brand05);
-    text-decoration: none;
-    margin: 0.04rem;
-    opacity: 0.8;
-}
-
-.footer-links a:hover {
-    opacity: 1;
-    color: var(--Brand03);
-}
-
-.social-icons {
+  }
+  
+  .footer-links a {
+    margin: 0 0.4rem;
+    /* Typography (font-family, etc.) comes from main.css! */
+  }
+  
+  .social-icons {
     margin-bottom: 1rem;
     display: flex;
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
     padding: 0;
-}
-
-.social-icons a {
+  }
+  
+  .social-icons a {
     display: inline-block;
     text-decoration: none;
     line-height: 0;
     margin: 0 0.5rem;
-}
-
-.social-icons img {
+  }
+  
+  .social-icons img {
     width: 24px;
     height: 24px;
     opacity: 0.75;
     transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.social-icons img:hover {
+  }
+  
+  .social-icons img:hover {
     transform: scale(1.2);
     opacity: 1;
     filter: drop-shadow(0 0 1px var(--Brand02));
-}
-
-.footer .copyright {
-    font-size: 0.75rem;
+  }
+  
+  .footer .copyright {
+    font-size: var(--fs-xs);
     opacity: 0.6;
-}
+    /* Typography (font-family, etc.) comes from main.css! */
+  }
+  
