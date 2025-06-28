@@ -5,18 +5,29 @@
     color: var(--Brand05);
     border-top: var(--stroke-light);
     flex-shrink: 0;
-    /* Typography (font-family, etc.) comes from main.css! */
   }
-  
   .footer-links {
     margin-bottom: 1rem;
   }
-  
   .footer-links a {
+    font-family: var(--font-menu);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--Brand05);
+    text-decoration: none;
+    transition: color 0.17s, opacity 0.17s;
+    opacity: 0.9;
     margin: 0 0.4rem;
-    /* Typography (font-family, etc.) comes from main.css! */
+    background: none;
+    border: none;
   }
-  
+  .footer-links a:hover,
+  .footer-links a:focus {
+    color: var(--Brand03);
+    opacity: 1;
+  }
   .social-icons {
     margin-bottom: 1rem;
     display: flex;
@@ -25,30 +36,25 @@
     flex-wrap: wrap;
     padding: 0;
   }
-  
   .social-icons a {
     display: inline-block;
     text-decoration: none;
     line-height: 0;
     margin: 0 0.5rem;
   }
-  
   .social-icons img {
     width: 24px;
     height: 24px;
     opacity: 0.75;
     transition: transform 0.2s ease, opacity 0.2s ease;
   }
-  
   .social-icons img:hover {
     transform: scale(1.2);
     opacity: 1;
     filter: drop-shadow(0 0 1px var(--Brand02));
   }
-  
   .footer .copyright {
     font-size: var(--fs-xs);
     opacity: 0.6;
-    /* Typography (font-family, etc.) comes from main.css! */
   }
   

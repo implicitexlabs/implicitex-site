@@ -1,74 +1,30 @@
-/* ===================== */
-/* === VARIABLE ROOT === */
-/* ===================== */
 :root {
-  /* Brand Palette */
   --Brand01: #f2f7e2;
   --Brand02: #ADADAD;
   --Brand03: #5cc0ca;
   --Brand04: #008080;
   --Brand05: #0D1A2C;
-
-  --clr01: #848673;
-  --clr02: #42433a;
-  --clr03: #272823;
-  --clr04: #1e1f1c;
-
-  /* Modern Tech Fonts */
-  --font-ui: 'Space Grotesk', Arial, sans-serif;  /* For nav, footer, all UI text */
-  --font-body: 'Space Grotesk', Arial, sans-serif; /* For all body/content copy */
-  --font-hero: 'Orbitron', 'Space Grotesk', Arial, sans-serif; /* For logo/wordmark/hero only */
+  --font-menu: 'Orbitron', 'Space Grotesk', Arial, sans-serif;
+  --font-body: 'Space Grotesk', Arial, sans-serif;
   --font-mono: 'DM Mono', 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
-
-  /* Font Sizes */
   --fs-xs: 0.75rem;
-  --fs-sm: 0.875rem;
   --fs-base: 1rem;
-  --fs-md: 1.125rem;
-  --fs-lg: 1.25rem;
-  --fs-xl: 1.5rem;
-  --fs-xxl: 2rem;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
   --radius-lg: 8px;
-  --radius-xl: 16px;
-
-  /* Border Strokes */
-  --stroke-light: 1px solid var(--Brand01);
-  --stroke-strong: 2px solid var(--Brand01);
-
-  --gold: #FFD35C;
-  --red: #A61818;
 }
 
-/* ===================== */
-/* === RESET & LAYOUT == */
-/* ===================== */
-
-
-* {
-  box-sizing: border-box;
-}
-
+/* Layout/background/content */
 html, body {
+  background: #141e2f;
+  color: var(--Brand01);
+  min-height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--Brand05);
   font-family: var(--font-body);
   font-size: var(--fs-base);
   line-height: 1.5;
-  color: var(--Brand01);
-  min-height: 100%;
-  scroll-behavior: smooth;
-  overscroll-behavior: contain;
 }
 
-body {
-  padding-top: 62px; /* Must match .header-bar height! */
-}
-
+/* Main content only */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -84,251 +40,61 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-#footer-placeholder {
-  flex-shrink: 0;
-}
-
-/* ===================== */
-/* === HEADER STYLES ====*/
-/* ===================== */
-.header-bar {
-  background: var(--Brand01);
-  height: 62px;
-  width: 100%;
-  box-shadow: 0 1px 8px 0 rgba(20,35,59,0.06);
-  display: flex;
   align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
+  background: transparent;
 }
 
-.header-inner {
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  box-sizing: border-box;
-}
-
-.header-logo svg {
-  width: 200px;
-  height: 50px;
-  display: block;
-}
-
-/* Navigation */
-.header-nav {
-  display: flex;
-  gap: 2.2rem;
-}
-
-.header-nav a,
-.footer-links a {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--Brand05);
-  text-decoration: none;
-  transition: color 0.17s, opacity 0.17s;
-  opacity: 0.9;
-}
-
-.header-nav a:hover,
-.footer-links a:hover {
-  color: var(--Brand03);
-  opacity: 1;
-}
-
-/* ===================== */
-/* === LOGO WRAP (Main) ==*/
-/* ===================== */
-.logo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.brandmark-svg, .wordmark-svg {
-  display: block;
-  margin: 0 auto 1rem auto;
-}
-
-.brandmark-svg {
-  width: clamp(50px, 25vw, 150px);
-}
-
-.wordmark-svg {
-  width: clamp(100px, 50vw, 500px);
-}
-
-/* ===================== */
-/* === TEXT & BUTTONS ===*/
-/* ===================== */
-h1, .tagline, .brandmark-svg, .wordmark-svg {
-  font-family: var(--font-hero);
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.intro-text, body, p, li, small {
+/* Body/content typography */
+body, .main-content, .intro-text, .copy-wrap, p, li, small {
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 1rem;
   letter-spacing: 0.01em;
 }
 
-h1.tagline {
-  font-size: clamp(2rem, 4vw, 2rem);
+/* Hero/tagline headline */
+h1, .tagline {
+  font-family: var(--font-menu);
+  font-size: clamp(2rem, 4vw, 2.2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
   margin: 2rem 0 1rem;
-  color: #FFFFFF;
 }
 
+/* BUTTONS (content only) */
 .cta-button {
-  padding: 0.75rem 2rem;
+  font-family: var(--font-menu);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #fff;
   background-color: transparent;
   border: 2px solid var(--Brand02);
   border-radius: var(--radius-lg);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--Brand01);
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-family: var(--font-ui);
   display: block;
-  margin: 2rem auto 0 auto; /* centers the button horizontally, with spacing above */
+  margin: 2rem auto 0 auto;
   max-width: 300px;
   width: 100%;
   box-sizing: border-box;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.cta-button:hover,
+.cta-button:focus {
+  background-color: var(--Brand02);
+  color: var(--Brand05);
+  border-color: var(--Brand03);
+  outline: none;
 }
 
-.cta-button:hover {
-  background-color: rgba(0,0,0,0.06);
-}
-
-/* Countdown and monospace/number styling */
+/* Monospace (numbers etc) */
 #countdown, .mono, .wallet-balance {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.7);
 }
-
-#countdown {
-  margin-top: 2rem;
-  font-size: 1rem;
-}
-
-/* Divider */
-.soft-divider {
-  border: none;
-  border-top: 1px solid rgba(255,255,255,0.15);
-  margin: 2.5rem auto;
-  max-width: 320px;
-  opacity: 0.5;
-}
-
-/* ===================== */
-/* === FOOTER STYLES === */
-/* ===================== */
-.footer {
-  background-color: var(--Brand01);
-  text-align: center;
-  padding: 2rem 1rem;
-  color: var(--Brand05);
-  font-size: var(--fs-sm);
-  border-top: var(--stroke-light);
-  flex-shrink: 0;
-  font-family: var(--font-ui);
-  letter-spacing: 0.05em;
-}
-
-.footer-links {
-  margin-bottom: 1rem;
-}
-
-.footer-links a {
-  margin: 0 0.4rem;
-}
-
-.social-icons {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 0;
-}
-
-.social-icons a {
-  display: inline-block;
-  text-decoration: none;
-  line-height: 0;
-  margin: 0 0.5rem;
-}
-
-.social-icons img {
-  width: 24px;
-  height: 24px;
-  opacity: 0.75;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.social-icons img:hover {
-  transform: scale(1.2);
-  opacity: 1;
-  filter: drop-shadow(0 0 1px var(--Brand02));
-}
-
-.footer .copyright {
-  font-size: var(--fs-xs);
-  opacity: 0.6;
-  font-family: var(--font-mono);
-  letter-spacing: 0.01em;
-}
-
-/* ===================== */
-/* === RESPONSIVE ====== */
-/* ===================== */
-@media (max-width: 1024px) {
-  .header-inner {
-    padding: 0 1rem;
-  }
-  .header-nav {
-    gap: 1.2rem;
-  }
-}
-@media (max-width: 600px) {
-  .header-bar {
-    height: 54px;
-  }
-  body {
-    padding-top: 54px;
-  }
-  .header-logo svg {
-    width: 130px;
-    height: 32px;
-  }
-  .header-nav a, .footer-links a {
-    font-size: 0.95rem;
-  }
-}
-
-/* Hide social icons on mobile */
-@media (max-width: 768px) {
-  .social-icons {
-    display: none;
-  }
-}
+#countdown { margin-top: 2rem; font-size: 1rem; }

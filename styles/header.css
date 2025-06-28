@@ -10,48 +10,68 @@
     left: 0;
     z-index: 1000;
   }
-  
   .header-inner {
-    max-width: 1400px;
     width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem;
+    padding-left: 2.2rem;
+    padding-right: 2.2rem;
     box-sizing: border-box;
+    height: 100%;
   }
-  
+  .header-logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
   .header-logo svg {
-    width: 200px;
-    height: 50px;
+    width: 500;
+    height: auto;
     display: block;
   }
-  
   .header-nav {
     display: flex;
-    gap: 2.2rem;
+    gap: 2.1rem;
+    align-items: center;
+    height: 100%;
+  }
+  .header-nav a {
+    font-family: var(--font-menu);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--Brand05);
+    text-decoration: none;
+    transition: color 0.17s, opacity 0.17s;
+    opacity: 0.9;
+    padding: 0 0.1rem;
+    display: inline-block;
+    line-height: 1;
+    background: none;
+    border: none;
+  }
+  .header-nav a:hover,
+  .header-nav a:focus {
+    color: var(--Brand03);
+    opacity: 1;
   }
   
-  /* Responsive adjustments */
   @media (max-width: 1024px) {
     .header-inner {
-      padding: 0 1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
-    .header-nav {
-      gap: 1.2rem;
-    }
+    .header-nav { gap: 1.1rem; }
+    .header-logo svg { width: 130px; height: 32px; }
   }
   @media (max-width: 600px) {
-    .header-bar {
-      height: 54px;
-    }
-    .header-logo svg {
-      width: 130px;
-      height: 32px;
-    }
-    .header-nav a {
-      font-size: 0.95rem;
-    }
+    .header-bar { height: 54px; }
+    .header-logo svg { width: 100px; height: 26px; }
+    .header-inner { padding-left: 0.6rem; padding-right: 0.6rem; }
+    .header-nav a { font-size: 0.87rem; }
   }
   
