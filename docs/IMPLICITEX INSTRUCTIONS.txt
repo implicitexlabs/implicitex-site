@@ -1,0 +1,185 @@
+IMPLICITEX INSTRUCTIONS (v2.0 — 2025-06-29)
+Tagline
+ImplicitEx: Trustless Value, Globally.
+
+Mission
+ImplicitEx is a decentralized, trustless wallet-to-wallet transaction layer and blockchain infrastructure for creators, merchants, and everyday users, initially focused on seamless USDC transfers with a transparent 1% base fee.
+Long-term, ImplicitEx expands into a modular suite: smart contracts, DAOs, decentralized identity, content rights, DeFi banking, lending, insurance, and tokenized assets (NFTs).
+First principles: minimal gatekeeping, transparent systems, and maximal user empowerment.
+
+Target Users
+Creators, merchants, and everyday users, with an initial focus on:
+
+Remittance
+
+Web3-native businesses
+
+DeFi enthusiasts
+
+Core Team & Roles
+Antoine: Primary developer—leads code, product, and marketing.
+
+ChatGPT (Chad): Security, architectural, and big-picture consultant; accountable for robustness and roadmap sanity checks.
+
+Grok (Greg): Security, architectural, and big-picture consultant; accountable for robustness and roadmap sanity checks.
+
+Jim (Gemini): Final decision validator and escalation point.
+
+Accountability
+
+Weekly check-ins (shared doc or async thread).
+
+Escalate blockers to the group for rapid decision-making.
+
+Celebrate milestones and adjust goals together.
+
+Guidance Style
+Leverage your extensive Fiat/Worldpay experience for user-centric design—clarity, reliability, and simple fee displays.
+
+Teach-back: I’ll break down every central concept (EVM, gas, wallets) and ask you to summarize, closing knowledge gaps.
+
+Translate all Web3 concepts into traditional banking analogies where possible.
+
+No dumbing-down. Complete system comprehension is the goal—complexity is welcome.
+
+Core Principles
+Decentralized by Design: No part of the platform should require a centralized custodian, or there must be a clear, near-term path to complete decentralization.
+
+Modular Development: MVP first. Every feature must be detachable, upgradable, and reusable.
+
+Web-First, App-Later: Mobile web is the design baseline.
+
+Transparent Incentives: Revenue models (fees, subs) must deliver measurable user benefit—no “dark patterns.”
+
+Low-Gatekeeper Policy: Avoid proprietary platforms unless necessary. No mandatory KYC unless required for fiat ramps. Wallet-based auth is the default.
+
+Security-First: All features must undergo a basic security review (using OpenZeppelin or an equivalent tool) before launch.
+
+Lean & Auditable: Ship quickly, but everything must be easily audited, portable, and extensible.
+
+MVP Focus
+Wallet-to-Wallet USDC Transfers
+
+Transparent 1% fee (no hidden costs)
+
+Optional Subscription: A $5 monthly fee reduces the transaction fee to 0.5% for transactions up to $5,000 per month—enforced via smart contract logic.
+
+Immediate value for merchants: Send $1,000+ monthly, and instantly beat Stripe/PayPal fees.
+
+User onboarding: One-page ‘First Transfer’ guide on the site.
+
+Fee Distribution Model
+Standard: 97% to recipient, 2% to ImplicitEx ops, 1% to escrow/tax/affiliate reserve.
+
+Alternative (w/ w/Subscription): 99% to recipient, 1% to ImplicitEx.
+
+Transparency: All fee logic is published on-chain and is explorable via Etherscan (or block explorer).
+
+UI: Display breakdown before transfer, and in modal confirmations.
+
+Blockchain Targets
+Start: Ethereum & Polygon (testnets for MVP, then mainnets).
+
+Expand: Solana & NEAR post-MVP.
+
+Fallback: If Ethereum gas prices spike, automatically suggest Polygon for user transactions.
+
+Languages & Tools
+Smart Contract: Solidity (EVM), Rust (Solana/NEAR). Start with Solidity.
+
+Dev Tools: Truffle (initial dev), Hardhat (production), Remix (browser IDE), Ganache (local testchain).
+
+Wallet: MetaMask, WalletConnect.
+
+Infra: Infura/Alchemy/QuickNode for RPC endpoints.
+
+Libraries: OpenZeppelin, Moralis, Zora.
+
+Monitoring: Integrate Tenderly and Etherscan alerts for contract monitoring.
+
+Platform Structure
+Web Core: Firebase (hosting, initial identity, analytics) + GitHub.
+
+API + Auth: Start with Firebase, then transition to wallet-based (WalletConnect) authentication in 3 months.
+
+UI/UX: Minimalist, fast, monochrome with accent. Mobile-responsive and accessible.
+
+Error Handling: Friendly, plain-language messages everywhere. E.g., “Insufficient USDC” (see modal.js/wallet.js).
+
+Frontend & UX
+Wallet Integration: Ethers.js, wagmi, or web3-react.
+
+Live Balances: Wallet, USDC, and ETH/MATIC balances are shown in real-time.
+
+Transaction Feedback: Loading indicators, hashes, explorer links, “Success!” checkmarks.
+
+Modal Component: All transaction confirmations handled in modals, with full fee breakdown (see modal.css).
+
+Transaction History: Initial MVP: show list of last 10 transfers (indexing contract events).
+Phase 2: Use the Graph Protocol for richer history and analytics.
+
+Security Protocols
+Utilize multi-signature wallets for treasury and fund management.
+
+Timelocks for any contract upgrades (post-MVP, if upgradable).
+
+OpenZeppelin’s ReentrancyGuard, AccessControl, and Pausable for all critical functions.
+
+No raw private key handling on the client.
+
+Test for reentrancy, overflows/underflows (SafeMath/solidity 0.8+).
+
+Third-party security audit (e.g., OpenZeppelin, Trail of Bits, or a similar service) before mainnet launch.
+
+Add an emergency pause mechanism in contracts.
+
+Compliance & Responsibility
+Legal: Start with free resources (LegalZoom, local legal aid) for tax and regulatory checks.
+Goal: Publish basic terms of service within 1 month.
+
+Data Privacy: Collect as little as possible—no IP logging unless absolutely needed for compliance.
+
+Fee Transparency: Document and explain all fees on both the website and in the smart contract.
+
+Monitor: Routinely compare our fees with Stripe/PayPal and adjust as needed.
+
+Milestones & Roadmap
+Week	Task
+1	Wallet-to-wallet demo (Polygon testnet)
+2	Firebase + MetaMask login integration
+3	Subscription model contract and fee logic
+4	Fee distribution transparency + MVP site launch
+5	Internal audit + closed beta
+6	Security milestone: Internal audit (OpenZeppelin Defender/MythX) + patch findings
+7+	Open docs, public feedback loop, start Phase 2 (creator tooling, DAO, etc)
+
+Personal:
+
+30-minute weekly reflection—what worked, what’s next, what to celebrate.
+
+Sync with Chad, Jim, and Greg.
+
+Legacy & Longevity
+Design everything for 10+ year durability: upgradable contracts, modular frontends, portable data.
+
+DAO vision: Gradual transition to community governance, token launch in Phase 2.
+
+Philosophy: Replace institutional intermediaries with programmable fairness.
+
+Additional Recommendations
+README.md: Document file purposes in repo (index.html for UI, wallet.js for blockchain logic, etc.).
+
+Resource List: CryptoZombies, ETHGlobal, OpenZeppelin Docs for learning and upskilling.
+
+Security: Run all new contracts through testnets + static analyzers (Slither, Mythril).
+
+User Feedback: In-app post-transaction survey to fine-tune product/fees.
+
+Integration with Current Files
+HTML: All main structural, meta, and accessibility requirements are present (see index.html).
+
+JavaScript: wallet.js is modular and structured for security; error handling is clear and user-friendly.
+
+CSS: Palette is applied with contrast in mind, following design tokens (main.css, wallet.css, etc.).
+
+UI Patterns: The modal window is universal and polished; dividers and accent marks adhere to the branding.
