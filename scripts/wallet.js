@@ -2,14 +2,29 @@
 
 window.userAddress = null;
 
-// Helper: Mask an address for UI
+// Helper: Mask an address (e.g., 0xAb12...cD34)
 function maskAddress(address) {
-  if (!address || address.length < 10) return address;
+  if (!address || address.length < 10) return address || '';
   return address.slice(0, 6) + '...' + address.slice(-4);
 }
 
+// UI: update Connect Wallet button state
+function updateConnectButton(address) {
+  const connectBtn = document.getElementById('btn-connect');
+  if (!connectBtn) return;
+  if (address) {
+    connectBtn.textContent = maskAddress(address);
+    connectBtn.classList.add('connected');
+  } else {
+    connectBtn.textContent = "Connect Wallet";
+    connectBtn.classList.remove('connected');
+  }
+}
+
+// Set global state and update UI
 function showWalletAddress(address) {
   window.userAddress = address;
+  updateConnectButton(address);
   if (window.showWalletUI) window.showWalletUI(address);
 }
 
@@ -34,18 +49,23 @@ async function connectWallet() {
 
 window.connectWallet = connectWallet;
 
-// Auto-connect on reload if accounts exist
+// Auto-connect on reload if authorized by wallet
 async function checkWalletOnLoad() {
   if (typeof window.ethereum !== 'undefined') {
     try {
       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       if (accounts && accounts.length > 0) {
         showWalletAddress(accounts[0]);
+      } else {
+        showWalletAddress(null);
       }
-    } catch (err) {}
+    } catch (err) {
+      showWalletAddress(null);
+    }
+  } else {
+    showWalletAddress(null);
   }
 }
-
 document.addEventListener('DOMContentLoaded', checkWalletOnLoad);
 
 if (typeof window.ethereum !== 'undefined' && window.ethereum.on) {
@@ -61,6 +81,7 @@ if (typeof window.ethereum !== 'undefined' && window.ethereum.on) {
 // ===================== SEND MODAL LOGIC =====================
 
 window.openSendModal = function () {
+  // These state vars only live in the closure of this modal instance:
   let fullAddressShown = false;
   let copiedShown = false;
   let currentUsdcBalance = 100; // Demo value
@@ -76,7 +97,8 @@ window.openSendModal = function () {
     return /^0x[a-fA-F0-9]{40}$/.test(addr);
   }
 
-  function renderModal() {
+  // Render only the modal form contents, not the whole modal
+  function renderModalContent() {
     const transferFee = amountValue && !isNaN(amountValue) ? (parseFloat(amountValue) * 0.01) : 0;
     const transferTotal = amountValue && !isNaN(amountValue) ? (parseFloat(amountValue) + transferFee) : 0;
     validAmount = !!amountValue && !isNaN(amountValue) && parseFloat(amountValue) > 0 && parseFloat(amountValue) + transferFee <= currentUsdcBalance;
@@ -100,11 +122,6 @@ window.openSendModal = function () {
       </div>
     `;
 
-    // Disconnect wallet button (below wallet address)
-    let disconnectButtonHTML = `
-      <button id="modal-disconnect-btn" class="modal-disconnect-btn" tabindex="0">Disconnect Wallet</button>
-    `;
-
     if (!inConfirmStep) {
       return `
         <form id="send-usdc-form" autocomplete="off" style="display:flex;flex-direction:column;gap:1.13em;">
@@ -114,7 +131,6 @@ window.openSendModal = function () {
               ${addressDisplay}
             </div>
             <div style="font-size:0.92em;opacity:0.77;margin-top:4px;" id="user-address-copy-notice">${copyNotice}</div>
-            ${disconnectButtonHTML}
           </div>
           <div>
             <label style="font-weight:600;">Balance(s)</label>
@@ -131,11 +147,11 @@ window.openSendModal = function () {
           <div>
             <label style="font-weight:600;">Amount (USDC)</label>
             <input id="amount-input" type="number" min="0" step="0.01" placeholder="0.00" value="${amountValue || ''}">
-            <div id="amount-warning-msg" style="font-size:0.92em;margin-top:2px;">${amountWarning}</div>
+            <div id="amount-warning-msg" style="font-size:0.92em;margin-top:2px;${amountWarning ? '' : 'display:none;'}">${amountWarning}</div>
           </div>
           <div>
-            <span>Transfer Fee (USDC): <b>${transferFee.toFixed(2)}</b></span><br>
-            <span>Transfer Total (USDC): <b style="color:#f5c000;font-size:1.13em;">${transferTotal.toFixed(2)}</b></span>
+            <span>Transfer Fee (USDC): <span id="fee-output">${transferFee.toFixed(2)}</span></span><br>
+            <span>Transfer Total (USDC): <span id="total-output" style="color:#f5c000;font-size:1.13em;">${transferTotal.toFixed(2)}</span></span>
           </div>
           ${gasSection}
         </form>
@@ -149,27 +165,28 @@ window.openSendModal = function () {
             <span style="font-family:var(--font-mono);color:var(--color-light-gray);word-break:break-all;">${maskAddress(recipientValue)}</span>
           </div>
           <div style="margin:0.6em 0 0.2em 0;">
-            <span>1% platform fee: <b>${transferFee.toFixed(2)} USDC</b></span><br>
+            <span>1% platform fee: <b>${(parseFloat(amountValue) * 0.01).toFixed(2)} USDC</b></span><br>
             <span>Estimated gas fees (see above for details).</span>
           </div>
           <div style="margin-top:1em;">
-            <span style="font-weight:600;color:#f5c000;">Total deducted: ${(parseFloat(amountValue)+transferFee).toFixed(2)} USDC + gas fees</span>
+            <span style="font-weight:600;color:#f5c000;">Total deducted: ${(parseFloat(amountValue)+parseFloat(amountValue)*0.01).toFixed(2)} USDC + gas fees</span>
           </div>
         </div>
       `;
     }
   }
 
-  function rerender() {
+  // Open and set up the modal
+  function openModalAndSetup() {
     openModal({
-      content: renderModal(),
+      content: renderModalContent(),
       confirmText: inConfirmStep ? "Send Transfer" : "Continue",
       cancelText: "Cancel",
       disableConfirm: (!inConfirmStep && !(validRecipient && validAmount)),
       onConfirm: () => {
         if (!inConfirmStep) {
           inConfirmStep = true;
-          rerender();
+          openModalAndSetup();
         } else {
           closeModal();
           setTimeout(() => {
@@ -189,50 +206,69 @@ window.openSendModal = function () {
     });
 
     setTimeout(() => {
+      // --- Interactive logic, never rerender modal on input ---
+
+      // Address reveal/copy
       const addressDiv = document.getElementById('user-address-display');
       if (addressDiv) {
         addressDiv.onclick = () => {
           fullAddressShown = !fullAddressShown;
           copiedShown = false;
-          rerender();
+          openModalAndSetup();
         };
         addressDiv.ondblclick = () => {
           if (window.userAddress) {
             navigator.clipboard.writeText(window.userAddress).then(() => {
               copiedShown = true;
               fullAddressShown = true;
-              rerender();
+              openModalAndSetup();
             });
           }
         };
       }
+
+      // Recipient input (validate on input)
       const recipientInput = document.getElementById('recipient-address-input');
       if (recipientInput) {
         recipientInput.value = recipientValue;
         recipientInput.oninput = (e) => {
           recipientValue = e.target.value.trim();
-          copiedShown = false;
-          validRecipient = validateEthAddress(recipientValue);
+          // Only update recipient validation message, not whole modal
           const vmsg = document.getElementById('recipient-validation-msg');
-          if (vmsg) {
-            if (recipientValue.length === 42) {
-              vmsg.innerHTML = validRecipient
-                ? '<span style="color:#6fd46f;">Valid Address</span>'
-                : '<span style="color:#d46f6f;">Invalid Address</span>';
-            } else {
-              vmsg.textContent = '';
-            }
+          validRecipient = validateEthAddress(recipientValue);
+          if (recipientValue.length === 42) {
+            vmsg.innerHTML = validRecipient
+              ? '<span style="color:#6fd46f;">Valid Address</span>'
+              : '<span style="color:#d46f6f;">Invalid Address</span>';
+          } else {
+            vmsg.textContent = '';
           }
         };
       }
+
+      // Amount input (updates fee/total below; never rerender modal)
       const amountInput = document.getElementById('amount-input');
+      const feeOutput = document.getElementById('fee-output');
+      const totalOutput = document.getElementById('total-output');
+      const warningMsg = document.getElementById('amount-warning-msg');
       if (amountInput) {
         amountInput.value = amountValue;
         amountInput.oninput = (e) => {
           amountValue = e.target.value;
-          rerender();
+          const val = parseFloat(amountValue);
+          const fee = isNaN(val) ? 0 : val * 0.01;
+          const total = isNaN(val) ? 0 : val + fee;
+          feeOutput.textContent = fee.toFixed(2);
+          totalOutput.textContent = total.toFixed(2);
+          if (!isNaN(val) && val + fee > currentUsdcBalance) {
+            warningMsg.style.display = 'block';
+          } else {
+            warningMsg.style.display = 'none';
+          }
         };
       }
+
+      // Network switch (dummy logic)
       const switchNetBtn = document.getElementById('switch-network');
       if (switchNetBtn) {
         switchNetBtn.onclick = () => {
@@ -241,21 +277,13 @@ window.openSendModal = function () {
             confirmText: "OK",
             cancelText: "",
             disableConfirm: false,
-            onConfirm: () => rerender()
+            onConfirm: () => openModalAndSetup()
           });
-        }
-      }
-      // Disconnect wallet from modal
-      const disconnectBtn = document.getElementById('modal-disconnect-btn');
-      if (disconnectBtn) {
-        disconnectBtn.onclick = () => {
-          window.userAddress = null;
-          if (window.showWalletUI) window.showWalletUI(null);
-          closeModal();
         };
       }
+
     }, 10);
   }
 
-  rerender();
+  openModalAndSetup();
 };
