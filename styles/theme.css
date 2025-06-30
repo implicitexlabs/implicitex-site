@@ -1,0 +1,14 @@
+:root {
+    --color-background: #000000;
+    --color-dark-accent: #1D1714;
+    --color-mid-gray: #524B4B;
+    --color-light-gray: #98918F;
+    --color-text-primary: #E2E0DF;
+    --color-error: #FF0000;
+    --font-menu: 'Orbitron', 'Space Grotesk', Arial, sans-serif;
+    --font-body: 'Space Grotesk', Arial, sans-serif;
+    --font-mono: 'DM Mono', 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
+    --fs-xs: 0.75rem;
+    --fs-base: 1rem;
+    --radius-standard: 6px;
+  }

@@ -106,12 +106,33 @@ window.openSendModal = function () {
 
     let addressDisplay = fullAddressShown ? window.userAddress : maskAddress(window.userAddress);
     let copyNotice = copiedShown ? '<span style="color:#6fd46f;">Copied!</span>' : 'Click to reveal. Double-click to copy.';
-    let recipientValidation = recipientValue.length === 42
-      ? (validRecipient ? '<span style="color:#6fd46f;">Valid Address</span>' : '<span style="color:#d46f6f;">Invalid Address</span>')
-      : '';
+
+    // --- Recipient field validation message logic ---
+    let recipientValidation = '';
+    if (recipientValue.length > 0) {
+      // Allow initial "0", "0x", or any partial that matches /^0x[a-fA-F0-9]*$/
+      if (/^0x[a-fA-F0-9]*$/.test(recipientValue)) {
+        if (recipientValue.length === 42) {
+          recipientValidation = validateEthAddress(recipientValue)
+            ? '<span style="color:#30b886;">Valid address ✔</span>'
+            : '<span style="color:#FF4D4D;">Invalid address</span>';
+        } else {
+          // Partial valid prefix, no message
+          recipientValidation = '';
+        }
+      } else {
+        // Show error ONLY if illegal character appears after "0x"
+        recipientValidation = '<span style="color:#FF4D4D;">Invalid character</span>';
+      }
+    }
+
+    // --- Amount field warning logic ---
     let amountWarning = '';
-    if (amountValue && !isNaN(amountValue) && parseFloat(amountValue) + transferFee > currentUsdcBalance) {
-      amountWarning = '<span style="color:#d46f6f;">Amount exceeds balance.</span>';
+    if (amountValue && !isNaN(amountValue)) {
+      const val = parseFloat(amountValue);
+      if (val + (val * 0.01) > currentUsdcBalance) {
+        amountWarning = '<span style="color:#FF4D4D;">Amount exceeds balance.</span>';
+      }
     }
 
     let gasSection = `
@@ -141,22 +162,20 @@ window.openSendModal = function () {
           <hr style="opacity:0.1;margin:1em 0;">
           <div>
             <label style="font-weight:600;">Recipient Address</label>
-            <input id="recipient-address-input" type="text" placeholder="0x..." maxlength="42" value="${recipientValue || ''}">
+            <input id="recipient-address-input" type="text" placeholder="0x..." maxlength="42" value="${recipientValue || ''}" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="recipient-validation-msg" style="font-size:0.92em;margin-top:2px;">${recipientValidation}</div>
           </div>
           <div>
             <label style="font-weight:600;">Amount (USDC)</label>
-            <input id="amount-input" type="number" min="0" step="0.01" placeholder="0.00" value="${amountValue || ''}">
+            <input id="amount-input" type="number" min="0" step="0.01" placeholder="0.00" value="${amountValue || ''}" inputmode="decimal" autocomplete="off">
             <div id="amount-warning-msg" style="font-size:0.92em;margin-top:2px;${amountWarning ? '' : 'display:none;'}">${amountWarning}</div>
           </div>
           <div>
             <div style="font-size:0.97em; color:var(--color-light-gray); margin-top:0.2em;">
-
             <span>Transfer Fee (USDC): <span id="fee-output">${transferFee.toFixed(2)}</span></span><br></div>
-
-            
             <span>Transfer Total (USDC): <span id="total-output" style="color:#f5c000;font-size:1.13em;">${transferTotal.toFixed(2)}</span></span>
-        </div>
+            <div>Estimated Gas (ETH/MATIC): <span id="gas-display">—</span></div>
+          </div>
           ${gasSection}
         </form>
       `;
@@ -231,45 +250,85 @@ window.openSendModal = function () {
         };
       }
 
-      // Recipient input (validate on input)
+      // Recipient input (validate on input, live feedback)
       const recipientInput = document.getElementById('recipient-address-input');
+      const recipientMsg = document.getElementById('recipient-validation-msg');
       if (recipientInput) {
         recipientInput.value = recipientValue;
-        recipientInput.oninput = (e) => {
+        recipientInput.addEventListener('input', (e) => {
           recipientValue = e.target.value.trim();
-          // Only update recipient validation message, not whole modal
-          const vmsg = document.getElementById('recipient-validation-msg');
-          validRecipient = validateEthAddress(recipientValue);
-          if (recipientValue.length === 42) {
-            vmsg.innerHTML = validRecipient
-              ? '<span style="color:#6fd46f;">Valid Address</span>'
-              : '<span style="color:#d46f6f;">Invalid Address</span>';
-          } else {
-            vmsg.textContent = '';
+          // Accept empty, "0", or "0x" as always neutral/valid so far
+          if (recipientValue === '' || recipientValue === '0' || recipientValue === '0x') {
+            recipientInput.classList.remove('input-valid', 'input-invalid');
+            recipientMsg.textContent = '';
+            return;
           }
-        };
+          // Legal partial input: 0x + hex chars up to 42 length
+          if (/^0x[a-fA-F0-9]*$/.test(recipientValue)) {
+            if (recipientValue.length === 42) {
+              if (validateEthAddress(recipientValue)) {
+                recipientInput.classList.add('input-valid');
+                recipientInput.classList.remove('input-invalid');
+                recipientMsg.innerHTML = '<span style="color:#30b886;">Valid address ✔</span>';
+              } else {
+                recipientInput.classList.add('input-invalid');
+                recipientInput.classList.remove('input-valid');
+                recipientMsg.innerHTML = '<span style="color:#FF4D4D;">Invalid address</span>';
+              }
+            } else {
+              recipientInput.classList.remove('input-valid', 'input-invalid');
+              recipientMsg.textContent = '';
+            }
+          } else {
+            recipientInput.classList.remove('input-valid');
+            recipientInput.classList.add('input-invalid');
+            recipientMsg.innerHTML = '<span style="color:#FF4D4D;">Invalid character</span>';
+          }
+        });
       }
 
-      // Amount input (updates fee/total below; never rerender modal)
+      // Amount input: block letters, validate bounds
       const amountInput = document.getElementById('amount-input');
       const feeOutput = document.getElementById('fee-output');
       const totalOutput = document.getElementById('total-output');
       const warningMsg = document.getElementById('amount-warning-msg');
       if (amountInput) {
         amountInput.value = amountValue;
-        amountInput.oninput = (e) => {
+        amountInput.addEventListener('keydown', (e) => {
+          // Allow only: digits, dot, nav keys, etc
+          if (
+            !/[0-9.]/.test(e.key) &&
+            !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'].includes(e.key)
+          ) {
+            e.preventDefault();
+          }
+        });
+        amountInput.addEventListener('input', (e) => {
           amountValue = e.target.value;
           const val = parseFloat(amountValue);
           const fee = isNaN(val) ? 0 : val * 0.01;
           const total = isNaN(val) ? 0 : val + fee;
           feeOutput.textContent = fee.toFixed(2);
           totalOutput.textContent = total.toFixed(2);
-          if (!isNaN(val) && val + fee > currentUsdcBalance) {
+
+          if (!/^\d*\.?\d*$/.test(amountValue) || isNaN(val) || val <= 0) {
+            amountInput.classList.remove('input-valid');
+            amountInput.classList.add('input-invalid');
             warningMsg.style.display = 'block';
-          } else {
-            warningMsg.style.display = 'none';
+            warningMsg.textContent = 'Only positive numbers allowed.';
+            return;
           }
-        };
+          if (val + fee > currentUsdcBalance) {
+            amountInput.classList.remove('input-valid');
+            amountInput.classList.add('input-invalid');
+            warningMsg.style.display = 'block';
+            warningMsg.textContent = 'Amount exceeds balance.';
+            return;
+          }
+          amountInput.classList.remove('input-invalid');
+          amountInput.classList.add('input-valid');
+          warningMsg.style.display = 'none';
+        });
       }
 
       // Network switch (dummy logic)
@@ -285,7 +344,6 @@ window.openSendModal = function () {
           });
         };
       }
-
     }, 10);
   }
 

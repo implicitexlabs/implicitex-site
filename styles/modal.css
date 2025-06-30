@@ -5,11 +5,15 @@
   --color-light-gray: #98918F;
   --color-text-primary: #E2E0DF;
   --color-error: #FF0000;
+  --color-accent: #FFD35C;
   --font-menu: 'Orbitron', 'Space Grotesk', Arial, sans-serif;
   --font-body: 'Space Grotesk', Arial, sans-serif;
   --font-mono: 'DM Mono', 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
   --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
   --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.25rem;
   --radius-standard: 6px;
 }
 
@@ -53,6 +57,7 @@ body {
   outline: none;
   letter-spacing: 0.04em;
   min-width: 120px;
+  text-transform: uppercase;
 }
 
 .cta-button:disabled,
@@ -97,21 +102,61 @@ body {
   max-width: 420px;
   margin: 0 auto;
   word-break: break-all;
+  font-family: var(--font-mono);
+  font-size: 1.04em;
+  margin-bottom: 1.5em;
+  text-align: left;
 }
 
 .modal-actions {
   display: flex;
-  gap: 1em;
-  margin: 1.1em 0 0 0;
   justify-content: center;
+  gap: 1.7em;         /* Wider gap for easier tap targets */
+  margin-bottom: 1.1em;
 }
 
-.modal-disclaimer {
+.modal-actions button {
+  padding: 0.55rem 1.2rem;
+  font-size: 1rem;
+  min-width: 100px;
+}
+
+#modal-confirm {
+  background: var(--color-dark-accent);
+  color: var(--color-text-primary);
+  border: 1.5px solid var(--color-light-gray);
+}
+#modal-confirm:hover {
+  background: var(--color-accent);
+  color: #1D1714;
+  border-color: var(--color-accent);
+}
+
+#modal-cancel {
+  background: transparent;
+  color: var(--color-light-gray);
+  border: 1.5px solid var(--color-light-gray);
+}
+#modal-cancel:hover {
+  background: var(--color-light-gray);
+  color: var(--color-dark-accent);
+}
+
+/* Modal Disclaimer & Microcopy */
+.modal-disclaimer,
+.modal-footer-copy {
   font-size: var(--fs-xs);
   color: var(--color-light-gray);
   text-align: center;
   opacity: 0.7;
   margin-top: 1.2em;
+}
+
+.modal-footer-copy a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  font-size: inherit;
+  opacity: 0.82;
 }
 
 input[type="text"], input[type="number"] {
@@ -133,6 +178,17 @@ input[type="text"]:focus, input[type="number"]:focus {
   border-color: var(--color-light-gray);
 }
 
+.input-valid {
+  border: 2px solid #30b886 !important;  /* Green */
+  box-shadow: 0 0 0 1px #30b886 inset;
+}
+.input-invalid {
+  border: 2px solid #FF4D4D !important;  /* Red */
+  box-shadow: 0 0 0 1px #FF4D4D inset;
+}
+
+/* Output and Data Fields */
+.output-field,
 .modal-address {
   background: #171b22;
   border-radius: var(--radius-standard);
@@ -148,12 +204,101 @@ input[type="text"]:focus, input[type="number"]:focus {
   cursor: pointer;
 }
 
-.modal-address.expanded {
+.modal-address.expanded,
+.output-field.expanded {
   white-space: normal;
   word-break: break-all;
   color: var(--color-text-primary);
 }
 
+/* --- MODAL LABELS & SUMMARY --- */
+.modal-label,
+.summary-label {
+  display: block;
+  font-family: var(--font-menu);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--color-light-gray);
+  margin: 1rem 0 0.25rem;
+  text-align: left;
+  letter-spacing: 0.03em;
+}
+
+.summary-value {
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: 1.06em;
+  margin: 0 0.18em;
+}
+
+.total-highlight {
+  color: var(--color-accent);
+  font-size: 1.23em;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  margin-left: 0.35em;
+}
+
+/* --- GAS ESTIMATE --- */
+.gas-estimate-row {
+  font-family: var(--font-mono);
+  font-size: 1.02em;
+  color: var(--color-light-gray);
+  margin-top: 0.16em;
+  margin-bottom: 0.22em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.gas-estimate-row .gas-label {
+  font-size: var(--fs-xs);
+  color: var(--color-light-gray);
+  opacity: 0.77;
+}
+.gas-estimate-row .gas-value {
+  font-size: 1.03em;
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+}
+
+.gas-estimate-row .gas-unit {
+  color: var(--color-accent);
+  font-size: 0.95em;
+  margin-left: 0.2em;
+}
+
+.gas-estimate-row .gas-usd {
+  color: var(--color-light-gray);
+  font-size: 0.95em;
+  margin-left: 0.25em;
+  opacity: 0.8;
+}
+
+/* --- HINTS & WARNINGS --- */
+.hint {
+  font-size: var(--fs-xs);
+  font-family: var(--font-body);
+  color: var(--color-light-gray);
+  margin: 0.32rem 0 0.75rem 0;
+  opacity: 0.9;
+  min-height: 1.1rem;
+  transition: opacity 0.3s;
+}
+
+.hint.error,
+input:invalid ~ .hint {
+  color: var(--color-error);
+  opacity: 1;
+}
+
+/* Modal Divider */
+.modal-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  margin: 1.4rem 0;
+}
+
+/* Mobile responsiveness */
 @media (max-width: 500px) {
   .modal {
     min-width: unset;
@@ -165,3 +310,28 @@ input[type="text"]:focus, input[type="number"]:focus {
     max-width: 95vw;
   }
 }
+
+/* -- Brandmark/logo row for modal (optional) -- */
+.modal-branding {
+  margin-top: 2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  opacity: 0.7;
+}
+
+.modal-logo {
+  width: 90px;
+  height: auto;
+}
+
+.modal-brandmark {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 0.22rem;
+}
+

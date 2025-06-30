@@ -110,21 +110,20 @@ h1, .tagline {
   align-items: center;
 }
 
-.button-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 .button-stack > * + * {
   margin-top: 18px;
 }
 
 /* SVG styles */
 .brandmark, .wordmark-svg svg {
-  fill: var(--color-text-primary);
-  stroke: var(--color-text-primary);
+  fill: #FF9900;
+  stroke: #FF9900;
   stroke-miterlimit: 10;
   stroke-width: 5;
+}
+
+.brandmark-svg svg {
+  padding: 20px;
 }
 
 /* Monospace (numbers, wallet balance, etc.) */
