@@ -49,7 +49,14 @@ async function connectWallet() {
 
 window.connectWallet = connectWallet;
 
-// Auto-connect on reload if authorized by wallet
+// Attach Connect Wallet button event
+document.addEventListener('DOMContentLoaded', function () {
+  const connectBtn = document.getElementById('btn-connect');
+  if (connectBtn) {
+    connectBtn.addEventListener('click', connectWallet);
+  }
+});
+
 async function checkWalletOnLoad() {
   if (typeof window.ethereum !== 'undefined') {
     try {
@@ -78,10 +85,118 @@ if (typeof window.ethereum !== 'undefined' && window.ethereum.on) {
   });
 }
 
+// ===================== NETWORK SWITCHING =====================
+
+const POLYGON_CHAIN_ID = "0x89"; // Polygon mainnet (hex)
+
+async function requestSwitchToPolygon() {
+  if (!window.ethereum) return alert("No wallet detected");
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: POLYGON_CHAIN_ID }]
+    });
+    // No alert needed—user will see MetaMask switch, modal updates after
+  } catch (switchError) {
+    if (switchError.code === 4902) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: POLYGON_CHAIN_ID,
+            chainName: 'Polygon Mainnet',
+            rpcUrls: ['https://polygon-rpc.com/'],
+            nativeCurrency: {
+              name: 'MATIC',
+              symbol: 'MATIC',
+              decimals: 18
+            },
+            blockExplorerUrls: ['https://polygonscan.com/']
+          }]
+        });
+        alert("Polygon added and switched!");
+      } catch (addError) {
+        alert("Could not add Polygon network.");
+      }
+    } else {
+      alert("Switching failed or was rejected.");
+    }
+  }
+}
+
+// ===================== GAS ESTIMATE =====================
+
+async function estimateGas(recipient, amount) {
+  const gasEl = document.getElementById('gas-display');
+  if (!gasEl) return;
+
+  if (!window.ethereum || !window.userAddress) {
+    gasEl.textContent = '—';
+    return;
+  }
+
+  try {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const network = await provider.getNetwork();
+
+    let USDC_ADDRESS, gasUnit;
+    if (network.chainId === 1) {
+      USDC_ADDRESS = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; // Ethereum USDC
+      gasUnit = "ETH";
+    } else if (network.chainId === 137) {
+      USDC_ADDRESS = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"; // Polygon USDC
+      gasUnit = "MATIC";
+    } else {
+      gasEl.textContent = '—';
+      return;
+    }
+
+    const ERC20_ABI = [
+      "function transfer(address to, uint256 value) public returns (bool)",
+      "function decimals() view returns (uint8)"
+    ];
+    const usdc = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, signer);
+    const decimals = await usdc.decimals();
+
+    if (!recipient || !/^0x[a-fA-F0-9]{40}$/.test(recipient) || isNaN(amount) || amount <= 0) {
+      gasEl.textContent = '—';
+      return;
+    }
+
+    const value = ethers.parseUnits(amount.toString(), decimals);
+    const txReq = await usdc.populateTransaction.transfer(recipient, value);
+
+    const gas = await provider.estimateGas({
+      ...txReq,
+      from: await signer.getAddress(),
+      to: USDC_ADDRESS
+    });
+
+    const feeData = await provider.getFeeData();
+    const gasPrice = feeData.gasPrice || feeData.maxFeePerGas;
+    if (!gasPrice) {
+      gasEl.textContent = 'n/a';
+      return;
+    }
+    // Gas * gasPrice = total cost in wei
+    const gasCost = ethers.formatUnits(gas * gasPrice, 'ether');
+    gasEl.textContent = `${parseFloat(gasCost).toFixed(6)} ${gasUnit}`;
+  } catch (e) {
+    gasEl.textContent = 'n/a';
+  }
+}
+
+// Listen for network change to update gas estimate live
+if (window.ethereum && window.ethereum.on) {
+  window.ethereum.on('chainChanged', () => {
+    // No-op here; modal listeners will auto-trigger gas estimate on next input.
+  });
+}
+
 // ===================== SEND MODAL LOGIC =====================
 
 window.openSendModal = function () {
-  // These state vars only live in the closure of this modal instance:
   let fullAddressShown = false;
   let copiedShown = false;
   let currentUsdcBalance = 100; // Demo value
@@ -97,7 +212,6 @@ window.openSendModal = function () {
     return /^0x[a-fA-F0-9]{40}$/.test(addr);
   }
 
-  // Render only the modal form contents, not the whole modal
   function renderModalContent() {
     const transferFee = amountValue && !isNaN(amountValue) ? (parseFloat(amountValue) * 0.01) : 0;
     const transferTotal = amountValue && !isNaN(amountValue) ? (parseFloat(amountValue) + transferFee) : 0;
@@ -107,26 +221,21 @@ window.openSendModal = function () {
     let addressDisplay = fullAddressShown ? window.userAddress : maskAddress(window.userAddress);
     let copyNotice = copiedShown ? '<span style="color:#6fd46f;">Copied!</span>' : 'Click to reveal. Double-click to copy.';
 
-    // --- Recipient field validation message logic ---
     let recipientValidation = '';
     if (recipientValue.length > 0) {
-      // Allow initial "0", "0x", or any partial that matches /^0x[a-fA-F0-9]*$/
       if (/^0x[a-fA-F0-9]*$/.test(recipientValue)) {
         if (recipientValue.length === 42) {
           recipientValidation = validateEthAddress(recipientValue)
             ? '<span style="color:#30b886;">Valid address ✔</span>'
             : '<span style="color:#FF4D4D;">Invalid address</span>';
         } else {
-          // Partial valid prefix, no message
           recipientValidation = '';
         }
       } else {
-        // Show error ONLY if illegal character appears after "0x"
         recipientValidation = '<span style="color:#FF4D4D;">Invalid character</span>';
       }
     }
 
-    // --- Amount field warning logic ---
     let amountWarning = '';
     if (amountValue && !isNaN(amountValue)) {
       const val = parseFloat(amountValue);
@@ -199,7 +308,6 @@ window.openSendModal = function () {
     }
   }
 
-  // Open and set up the modal
   function openModalAndSetup() {
     openModal({
       content: renderModalContent(),
@@ -229,8 +337,6 @@ window.openSendModal = function () {
     });
 
     setTimeout(() => {
-      // --- Interactive logic, never rerender modal on input ---
-
       // Address reveal/copy
       const addressDiv = document.getElementById('user-address-display');
       if (addressDiv) {
@@ -250,20 +356,19 @@ window.openSendModal = function () {
         };
       }
 
-      // Recipient input (validate on input, live feedback)
+      // Recipient input
       const recipientInput = document.getElementById('recipient-address-input');
       const recipientMsg = document.getElementById('recipient-validation-msg');
       if (recipientInput) {
         recipientInput.value = recipientValue;
         recipientInput.addEventListener('input', (e) => {
           recipientValue = e.target.value.trim();
-          // Accept empty, "0", or "0x" as always neutral/valid so far
           if (recipientValue === '' || recipientValue === '0' || recipientValue === '0x') {
             recipientInput.classList.remove('input-valid', 'input-invalid');
             recipientMsg.textContent = '';
+            estimateGas('', amountValue);
             return;
           }
-          // Legal partial input: 0x + hex chars up to 42 length
           if (/^0x[a-fA-F0-9]*$/.test(recipientValue)) {
             if (recipientValue.length === 42) {
               if (validateEthAddress(recipientValue)) {
@@ -284,10 +389,11 @@ window.openSendModal = function () {
             recipientInput.classList.add('input-invalid');
             recipientMsg.innerHTML = '<span style="color:#FF4D4D;">Invalid character</span>';
           }
+          estimateGas(recipientValue, amountValue);
         });
       }
 
-      // Amount input: block letters, validate bounds
+      // Amount input
       const amountInput = document.getElementById('amount-input');
       const feeOutput = document.getElementById('fee-output');
       const totalOutput = document.getElementById('total-output');
@@ -295,7 +401,6 @@ window.openSendModal = function () {
       if (amountInput) {
         amountInput.value = amountValue;
         amountInput.addEventListener('keydown', (e) => {
-          // Allow only: digits, dot, nav keys, etc
           if (
             !/[0-9.]/.test(e.key) &&
             !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'].includes(e.key)
@@ -316,36 +421,36 @@ window.openSendModal = function () {
             amountInput.classList.add('input-invalid');
             warningMsg.style.display = 'block';
             warningMsg.textContent = 'Only positive numbers allowed.';
+            estimateGas(recipientValue, '');
             return;
           }
           if (val + fee > currentUsdcBalance) {
-            amountInput.classList.remove('input-valid');
-            amountInput.classList.add('input-invalid');
-            warningMsg.style.display = 'block';
-            warningMsg.textContent = 'Amount exceeds balance.';
-            return;
-          }
-          amountInput.classList.remove('input-invalid');
-          amountInput.classList.add('input-valid');
-          warningMsg.style.display = 'none';
-        });
-      }
-
-      // Network switch (dummy logic)
-      const switchNetBtn = document.getElementById('switch-network');
-      if (switchNetBtn) {
-        switchNetBtn.onclick = () => {
-          openModal({
-            content: `<h2>Network Switched!</h2><p>(Network switching logic not yet implemented.)</p>`,
-            confirmText: "OK",
-            cancelText: "",
-            disableConfirm: false,
-            onConfirm: () => openModalAndSetup()
-          });
-        };
-      }
-    }, 10);
-  }
-
-  openModalAndSetup();
-};
+              amountInput.classList.remove('input-valid');
+              amountInput.classList.add('input-invalid');
+              warningMsg.style.display = 'block';
+              warningMsg.textContent = 'Amount exceeds balance.';
+              estimateGas(recipientValue, amountValue);
+              return;
+            }
+            amountInput.classList.remove('input-invalid');
+            amountInput.classList.add('input-valid');
+            warningMsg.style.display = 'none';
+            estimateGas(recipientValue, amountValue);
+            });
+            }
+            
+            // --- Network Switch: Actually switch network and update gas estimate ---
+            const switchNetBtn = document.getElementById('switch-network');
+            if (switchNetBtn) {
+              switchNetBtn.onclick = async () => {
+                await requestSwitchToPolygon();
+                estimateGas(recipientValue, amountValue);
+              };
+            }
+            }, 10); // End setTimeout for modal DOM
+            
+            } // End openModalAndSetup
+            
+            openModalAndSetup();
+            }; // End window.openSendModal
+            
