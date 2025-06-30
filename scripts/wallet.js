@@ -150,9 +150,13 @@ window.openSendModal = function () {
             <div id="amount-warning-msg" style="font-size:0.92em;margin-top:2px;${amountWarning ? '' : 'display:none;'}">${amountWarning}</div>
           </div>
           <div>
-            <span>Transfer Fee (USDC): <span id="fee-output">${transferFee.toFixed(2)}</span></span><br>
+            <div style="font-size:0.97em; color:var(--color-light-gray); margin-top:0.2em;">
+
+            <span>Transfer Fee (USDC): <span id="fee-output">${transferFee.toFixed(2)}</span></span><br></div>
+
+            
             <span>Transfer Total (USDC): <span id="total-output" style="color:#f5c000;font-size:1.13em;">${transferTotal.toFixed(2)}</span></span>
-          </div>
+        </div>
           ${gasSection}
         </form>
       `;
