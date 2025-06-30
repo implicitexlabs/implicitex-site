@@ -8,6 +8,7 @@ function showError(message, container = document.body) {
   setTimeout(() => errorEl.remove(), 5000);
 }
 
+// Dynamically load header/footer if needed
 function loadComponents() {
   const headerPlaceholder = document.getElementById('header-placeholder');
   const footerPlaceholder = document.getElementById('footer-placeholder');
@@ -31,8 +32,6 @@ function loadComponents() {
         const yearEl = document.getElementById('year');
         if (yearEl) {
           yearEl.textContent = new Date().getFullYear();
-        } else {
-          showError('Footer year element not found.', footerPlaceholder);
         }
       })
       .catch(err => {
@@ -41,34 +40,46 @@ function loadComponents() {
   }
 }
 
-function initConnectWallet() {
-  const connectButton = document.getElementById('btn-connect');
-  if (!connectButton) return;
+// Show Connect/Create Transfer, handle state
+function initWalletUI() {
+  const connectBtn = document.getElementById('btn-connect');
+  let transferBtn = document.getElementById('btn-create-transfer');
 
-  connectButton.addEventListener('click', () => {
-    openModal({
-      content: `
-        <h2>Connect Wallet</h2>
-        <p>Connect your wallet to start sending USDC.</p>
-      `
-    });
+  if (transferBtn) transferBtn.remove();
 
-    // Remove previous listeners to avoid duplicates
-    const modalConfirm = document.querySelector('#modal-confirm');
-    if (modalConfirm) {
-      const newModalConfirm = modalConfirm.cloneNode(true);
-      modalConfirm.parentNode.replaceChild(newModalConfirm, modalConfirm);
+  window.showWalletUI = function(address) {
+    if (address) {
+      connectBtn.textContent = 'Disconnect Wallet';
+      connectBtn.classList.add('connected');
+      if (!document.getElementById('btn-create-transfer')) {
+        transferBtn = document.createElement('button');
+        transferBtn.id = 'btn-create-transfer';
+        transferBtn.className = 'cta-button';
+        transferBtn.textContent = 'Create Transfer';
+        connectBtn.parentNode.insertBefore(transferBtn, connectBtn.nextSibling);
+        transferBtn.addEventListener('click', () => {
+          if (window.openSendModal) window.openSendModal();
+        });
+      }
+    } else {
+      connectBtn.textContent = 'Connect Wallet';
+      connectBtn.classList.remove('connected');
+      const btn = document.getElementById('btn-create-transfer');
+      if (btn) btn.remove();
+    }
+  };
 
-      newModalConfirm.addEventListener('click', () => {
-        if (window.connectWallet) {
-          window.connectWallet();
-        }
-      });
+  connectBtn.addEventListener('click', () => {
+    if (window.userAddress) {
+      window.userAddress = null;
+      window.showWalletUI(null);
+    } else {
+      if (window.connectWallet) window.connectWallet();
     }
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   loadComponents();
-  initConnectWallet();
+  initWalletUI();
 });
