@@ -1,291 +1,255 @@
-// Wait for the DOM to load before initializing wallet functionality
-document.addEventListener('DOMContentLoaded', function () {
-    // DOM elements for wallet connection and transfer initiation
-    const connectBtn = document.getElementById('btn-connect');
-    const createBtn = document.getElementById('btn-create');
-    const walletData = document.getElementById('wallet-data');
-    const addrDisplay = document.getElementById('wallet-address');
-    let fullWalletAddress = ""; // Store the connected wallet address
+// wallet.js
 
-    // Utility function to shorten wallet addresses for display
-    function shortenAddress(addr) {
-        return addr ? addr.slice(0, 6) + "..." + addr.slice(-4) : "";
+let userAddress = null;
+
+// Mask and reveal logic for address
+function maskAddress(address) {
+  if (!address || address.length < 10) return address;
+  return address.slice(0, 6) + '...' + address.slice(-4);
+}
+
+// Balance stub (for now, fake values)
+async function getBalances(address) {
+  // TODO: Real contract calls
+  return {
+    usdc: '—',
+    eth: '—'
+  };
+}
+
+// Show wallet address in button and add Send button if connected
+function showWalletAddress(address) {
+  const connectButton = document.getElementById('btn-connect');
+  if (connectButton) {
+    connectButton.textContent = 'Connected: ' + maskAddress(address);
+    connectButton.classList.add('connected');
+    connectButton.disabled = false;
+    userAddress = address;
+
+    // Add Send button if not present
+    if (!document.getElementById('btn-send-usdc')) {
+      const sendBtn = document.createElement('button');
+      sendBtn.id = 'btn-send-usdc';
+      sendBtn.className = 'cta-button';
+      sendBtn.textContent = 'Send USDC';
+      connectButton.parentNode.insertBefore(sendBtn, connectButton.nextSibling);
+      sendBtn.addEventListener('click', openSendModal);
+    }
+  }
+}
+
+async function connectWallet() {
+  if (typeof window.ethereum === 'undefined') {
+    openModal({content: 'No wallet detected. Please install MetaMask or another Web3 wallet.', disableConfirm: true});
+    return;
+  }
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    if (accounts && accounts.length > 0) {
+      showWalletAddress(accounts[0]);
+      closeModal();
+    } else {
+      openModal({content: 'No wallet address returned.', disableConfirm: true});
+    }
+  } catch (err) {
+    openModal({content: `Failed to connect wallet: ${err.message || err}`, disableConfirm: true});
+  }
+}
+
+async function checkWalletOnLoad() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts && accounts.length > 0) {
+        showWalletAddress(accounts[0]);
+      }
+    } catch (err) {}
+  }
+}
+
+window.connectWallet = connectWallet;
+
+document.addEventListener('DOMContentLoaded', checkWalletOnLoad);
+
+if (typeof window.ethereum !== 'undefined') {
+  window.ethereum.on && window.ethereum.on('accountsChanged', function(accounts) {
+    if (accounts && accounts.length > 0) {
+      showWalletAddress(accounts[0]);
+    } else {
+      const connectButton = document.getElementById('btn-connect');
+      if (connectButton) {
+        connectButton.textContent = 'Connect Wallet';
+        connectButton.classList.remove('connected');
+      }
+      const sendBtn = document.getElementById('btn-send-usdc');
+      if (sendBtn) sendBtn.remove();
+      userAddress = null;
+    }
+  });
+}
+
+// ====== SEND USDC MODAL UI ======
+
+function openSendModal() {
+  // Use async to allow loading of balances later
+  let fullAddressShown = false;
+  let copiedShown = false;
+  let currentUsdcBalance = 100; // Demo value
+  let currentEthBalance = 0.1; // Demo value
+
+  // Inputs state
+  let recipientValue = '';
+  let amountValue = '';
+  let validRecipient = false;
+  let validAmount = false;
+
+  // Helper: Validate recipient address (Ethereum format)
+  function validateEthAddress(addr) {
+    return /^0x[a-fA-F0-9]{40}$/.test(addr);
+  }
+
+  function renderModal() {
+    const transferFee = amountValue && !isNaN(amountValue) ? (parseFloat(amountValue) * 0.01) : 0;
+    const transferTotal = amountValue && !isNaN(amountValue) ? (parseFloat(amountValue) + transferFee) : 0;
+    validAmount = !!amountValue && !isNaN(amountValue) && parseFloat(amountValue) > 0 && parseFloat(amountValue) + transferFee <= currentUsdcBalance;
+    validRecipient = validateEthAddress(recipientValue);
+
+    let addressDisplay = fullAddressShown ? userAddress : maskAddress(userAddress);
+    let copyNotice = copiedShown ? '<span style="color:#6fd46f;">Copied!</span>' : 'Click to reveal. Double-click to copy.';
+    let recipientValidation = recipientValue.length === 42
+      ? (validRecipient ? '<span style="color:#6fd46f;">Valid Address</span>' : '<span style="color:#d46f6f;">Invalid Address</span>')
+      : '';
+    let amountWarning = '';
+    if (amountValue && !isNaN(amountValue) && parseFloat(amountValue) + transferFee > currentUsdcBalance) {
+      amountWarning = '<span style="color:#d46f6f;">Amount exceeds balance.</span>';
     }
 
-    // Providers for Ethereum, Sepolia, and Polygon networks
-    const providers = {
-        "0x1": new ethers.JsonRpcProvider("https://eth-mainnet.g.alchemy.com/v2/tNw9iRsScHuuRi9OzxX1lGHx83a3UNmt"),
-        "0xaa36a7": new ethers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/tNw9iRsScHuuRi9OzxX1lGHx83a3UNmt"),
-        "0x89": new ethers.JsonRpcProvider("https://polygon-mainnet.g.alchemy.com/v2/tNw9iRsScHuuRi9OzxX1lGHx83a3UNmt")
-    };
+    // Placeholder gas/network section
+    let gasSection = `
+      <div style="margin-top:1em;font-size:0.95em;">
+        <b>Network Fees</b><br>
+        <span>Gas (ETH): <span style="color:#999;">placeholder</span> &nbsp;|&nbsp; Gas (Polygon): <span style="color:#999;">placeholder</span></span><br>
+        <span style="color:#6fd46f;">Polygon likely cheaper. <button id="switch-network" style="margin-left:8px;">Switch to Polygon</button></span>
+      </div>
+    `;
 
-    // Determine the active provider based on the connected wallet's chain
-    async function getActiveProvider() {
-        if (!window.ethereum) return providers["0xaa36a7"]; // Fallback to Sepolia if no wallet
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        return providers[chainId] || providers["0xaa36a7"]; // Default to Sepolia if chainId unknown
-    }
+    // The full modal content
+    return `
+      <form id="send-usdc-form" autocomplete="off" style="display:flex;flex-direction:column;gap:1.2em;">
+        <div>
+          <label style="font-weight:600;">Address</label>
+          <div id="user-address-display" class="modal-address" tabindex="0" style="user-select:all;cursor:pointer;border:1px solid #333;padding:8px 12px;border-radius:8px;background:#171b22;font-size:1.07em;letter-spacing:0.01em;">
+            ${addressDisplay}
+          </div>
+          <div style="font-size:0.92em;opacity:0.77;margin-top:4px;" id="user-address-copy-notice">${copyNotice}</div>
+        </div>
+        <div>
+          <label style="font-weight:600;">Balance(s)</label>
+          <div style="border:1px solid #333;padding:8px 12px;border-radius:8px;background:#171b22;">
+            USDC: ${currentUsdcBalance} &nbsp;|&nbsp; ETH: ${currentEthBalance}
+          </div>
+        </div>
+        <hr style="opacity:0.1;margin:1em 0;">
+        <div>
+          <label style="font-weight:600;">Recipient Address</label>
+          <input id="recipient-address-input" type="text" placeholder="0x..." maxlength="42" style="width:100%;padding:8px 12px;font-size:1em;border-radius:8px;border:1px solid #333;background:#181b23;color:#eee;" value="${recipientValue || ''}">
+          <div id="recipient-validation-msg" style="font-size:0.92em;margin-top:2px;">${recipientValidation}</div>
+        </div>
+        <div>
+          <label style="font-weight:600;">Amount (USDC)</label>
+          <input id="amount-input" type="number" min="0" step="0.01" placeholder="0.00" style="width:100%;padding:8px 12px;font-size:1em;border-radius:8px;border:1px solid #333;background:#181b23;color:#eee;" value="${amountValue || ''}">
+          <div id="amount-warning-msg" style="font-size:0.92em;margin-top:2px;">${amountWarning}</div>
+        </div>
+        <div>
+          <span>Transfer Fee (USDC): <b>${transferFee.toFixed(2)}</b></span><br>
+          <span>Transfer Total (USDC): <b style="color:#f5c000;font-size:1.13em;">${transferTotal.toFixed(2)}</b></span>
+        </div>
+        ${gasSection}
+      </form>
+    `;
+  }
 
-    // Display wallet balances (USDC and ETH) and transaction history
-    async function showBalances(address) {
-        const provider = await getActiveProvider();
-        const ethBal = Number(ethers.formatEther(await provider.getBalance(address))).toLocaleString(undefined, { maximumFractionDigits: 6 });
-        const chainId = (await provider.getNetwork()).chainId.toString();
-
-        // USDC contract addresses for supported networks
-        const USDC_ADDRESS = {
-            "11155111": "0x5c221e77624690fff6dd741493d735a17716c26b", // Sepolia
-            "137": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", // Polygon
-            "1": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" // Ethereum mainnet
-        }[chainId];
-
-        // USDC contract interaction
-        const usdc = new ethers.Contract(USDC_ADDRESS, [
-            "function balanceOf(address owner) view returns (uint256)",
-            "function decimals() view returns (uint8)",
-            "event Transfer(address indexed from, address indexed to, uint256 value)"
-        ], provider);
-        const decimals = await usdc.decimals();
-        window.currentUSDCBalance = parseFloat(ethers.formatUnits(await usdc.balanceOf(address), decimals));
-
-        // Update modal with address and balances
-        document.getElementById('modal-wallet-address').textContent = shortenAddress(address);
-        document.getElementById('modal-wallet-balances').textContent = `USDC: ${window.currentUSDCBalance.toFixed(2)} | ETH: ${ethBal}`;
-
-        // Fetch and display last 10 transfers for the connected wallet
-        const transferEvents = await usdc.queryFilter("Transfer", -1000);
-        const historyHtml = transferEvents
-            .filter(e => e.args.from === address || e.args.to === address)
-            .slice(0, 10)
-            .map(e => `<div>Transfer: ${ethers.formatUnits(e.args.value, decimals)} USDC to ${shortenAddress(e.args.to)} 
-            (<a href="${chainId === "137" ? "https://polygonscan.com/tx/" : "https://sepolia.etherscan.io/tx/"}${e.transactionHash}" target="_blank">View</a>)</div>`)
-            .join('');
-        document.getElementById('modal-transaction-history').innerHTML = historyHtml || "No recent transfers.";
-    }
-
-    // Handle wallet connection via MetaMask
-    connectBtn.addEventListener('click', async () => {
-        if (!window.ethereum) return alert("No Ethereum provider detected. Please install MetaMask.");
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            fullWalletAddress = accounts[0];
-            connectBtn.textContent = 'Connected';
-            connectBtn.disabled = true;
-            walletData.textContent = shortenAddress(fullWalletAddress);
-            addrDisplay.style.color = "#30B886";
-            showBalances(fullWalletAddress);
-            createBtn.disabled = false;
-        } catch (err) {
-            alert("Error: " + (err.message || err));
-        }
+  function rerender() {
+    openModal({
+      content: renderModal(),
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+      disableConfirm: !(validRecipient && validAmount),
+      onConfirm: () => {
+        // For now, just close and show a success message
+        closeModal();
+        setTimeout(() => {
+          openModal({
+            content: `<h2>Transaction Confirmed!</h2><p>Sent ${amountValue} USDC to ${maskAddress(recipientValue)}.<br>Fee: ${(parseFloat(amountValue)*0.01).toFixed(2)} USDC.</p>`,
+            confirmText: "OK",
+            cancelText: "",
+            disableConfirm: false,
+            onConfirm: () => closeModal()
+          });
+        }, 220);
+      },
+      onCancel: () => {
+        closeModal();
+      }
     });
 
-    // Handle transfer initiation and modal display
-    createBtn.addEventListener('click', () => {
-        if (!fullWalletAddress) {
-            const hint = document.getElementById('wallet-hint');
-            hint.classList.add('visible');
-            hint.style.visibility = 'visible';
-            hint.style.opacity = 1;
-            hint.textContent = 'Please connect your wallet first.';
-            setTimeout(() => hint.classList.remove('visible') && (hint.style.opacity = 0) && (hint.style.visibility = 'hidden'), 4000);
-            return;
+    // Event delegation for form elements (after modal is rendered)
+    setTimeout(() => {
+      // Address reveal/copy logic
+      const addressDiv = document.getElementById('user-address-display');
+      const copyNotice = document.getElementById('user-address-copy-notice');
+      if (addressDiv) {
+        addressDiv.onclick = () => {
+          fullAddressShown = !fullAddressShown;
+          copiedShown = false;
+          rerender();
+        };
+        addressDiv.ondblclick = () => {
+          if (userAddress) {
+            navigator.clipboard.writeText(userAddress).then(() => {
+              copiedShown = true;
+              fullAddressShown = true;
+              rerender();
+            });
+          }
+        };
+      }
+
+      // Recipient input validation
+      const recipientInput = document.getElementById('recipient-address-input');
+      if (recipientInput) {
+        recipientInput.oninput = (e) => {
+          recipientValue = e.target.value.trim();
+          copiedShown = false;
+          rerender();
+        };
+      }
+
+      // Amount input validation
+      const amountInput = document.getElementById('amount-input');
+      if (amountInput) {
+        amountInput.oninput = (e) => {
+          amountValue = e.target.value;
+          rerender();
+        };
+      }
+
+      // Network switch
+      const switchNetBtn = document.getElementById('switch-network');
+      if (switchNetBtn) {
+        switchNetBtn.onclick = () => {
+          // Just a placeholder - show a message
+          openModal({
+            content: `<h2>Network Switched!</h2><p>(Network switching logic not yet implemented.)</p>`,
+            confirmText: "OK",
+            cancelText: "",
+            disableConfirm: false,
+            onConfirm: () => rerender()
+          });
         }
+      }
+    }, 10);
+  }
 
-        // Modal HTML for transfer input and confirmation
-        const modalHtml = `
-            <div class="modal-output-block">
-                <label class="modal-label">Address</label>
-                <div id="modal-wallet-address" class="output-field">Loading...</div>
-                <div class="hint">Click to reveal. Double-click to copy.</div>
-                <label class="modal-label">Balance(s)</label>
-                <div id="modal-wallet-balances" class="output-field">USDC: — | ETH: —</div>
-                <label class="modal-label">Transaction History</label>
-                <div id="modal-transaction-history" class="output-field">Loading...</div>
-                <hr class="modal-divider" />
-            </div>
-            <div class="modal-input-block">
-                <label class="summary-label" for="modal-recipient">Recipient Address</label>
-                <input id="modal-recipient" type="text" class="modal-input" placeholder="0x... or ENS name" />
-                <div id="address-warning" class="hint"></div>
-                <label class="summary-label" for="modal-amount">Amount (USDC)</label>
-                <input id="modal-amount" type="number" step="0.01" class="modal-input" placeholder="e.g. 20.00" />
-                <div id="amount-warning" class="hint">1% fee (0.5% with subscription)</div>
-                <div class="modal-network-options">
-                    <label for="network-select">Network:</label>
-                    <select id="network-select">
-                        <option value="0x1">Ethereum</option>
-                        <option value="0x89">Polygon</option>
-                    </select>
-                </div>
-                <div class="modal-fee-summary">
-                    <div>Transfer Fee (USDC): <span id="fee-display">—</span></div>
-                    <div>Transfer Total (USDC): <span id="total-display" class="total-highlight">—</span></div>
-                    <div>Gas Estimate (ETH): <span id="gas-display">—</span></div>
-                </div>
-                <button id="subscribe-btn" class="modal-btn">Subscribe ($5/month for 0.5% fee)</button>
-            </div>
-        `;
-
-        // Show modal and handle transfer confirmation
-        showModal(modalHtml, async () => {
-            let recipient = document.getElementById('modal-recipient').value.trim();
-            const amount = parseFloat(document.getElementById('modal-amount').value.trim());
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-
-            // Resolve ENS names if provided
-            if (recipient.endsWith('.eth')) {
-                recipient = await (await getActiveProvider()).resolveName(recipient) || recipient;
-                if (!ethers.isAddress(recipient)) return alert("Invalid ENS name.");
-                document.getElementById('modal-recipient').value = recipient;
-            }
-
-            // Validate recipient and amount
-            if (!ethers.isAddress(recipient)) return alert("Invalid address.");
-            if (isNaN(amount) || amount <= 0) return alert("Invalid amount.");
-
-            // Network-specific USDC and contract addresses
-            const USDC_ADDRESS = {
-                "0xaa36a7": "0x5c221e77624690fff6dd741493d735a17716c26b",
-                "0x89": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-                "0x1": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-            }[chainId];
-            const TRANSFER_ADDRESS = "0xYourImplicitExTransferAddress"; // Replace with actual address
-            const SUBSCRIPTION_ADDRESS = "0xYourSubscriptionContractAddress"; // Replace with actual address
-
-            // Check subscription status and calculate fee
-            const subscriptionContract = new ethers.Contract(SUBSCRIPTION_ADDRESS, ["function isSubscribed(address user) view returns (bool)"], provider);
-            const isSubscribed = await subscriptionContract.isSubscribed(fullWalletAddress);
-            const feeRate = isSubscribed ? 0.005 : 0.01;
-            const fee = amount * feeRate;
-            const total = amount + fee;
-
-            if (total > window.currentUSDCBalance) return alert("Insufficient USDC.");
-
-            // Estimate gas cost for the transfer
-            const transferContract = new ethers.Contract(TRANSFER_ADDRESS, ["function transfer(address recipient, uint256 amount)"], provider);
-            const gasPrice = await provider.getGasPrice();
-            const gasEstimate = await transferContract.estimateGas.transfer(recipient, ethers.parseUnits(amount.toString(), 6));
-            const gasCost = ethers.formatEther(gasPrice * gasEstimate);
-            document.getElementById('gas-display').textContent = gasCost.slice(0, 8);
-
-            // Prompt for Polygon if Ethereum gas is high
-            if (chainId === "0x1" && parseFloat(ethers.formatUnits(gasPrice, 'gwei')) > 100) {
-                if (confirm("High gas prices on Ethereum. Switch to Polygon?")) {
-                    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x89' }] });
-                    return;
-                }
-            }
-
-            // Warn if recipient is a contract
-            if ((await provider.getCode(recipient)) !== '0x' && !confirm("Recipient is a contract. Proceed?")) return;
-
-            try {
-                const signer = await provider.getSigner();
-                const transferContract = new ethers.Contract(TRANSFER_ADDRESS, ["function transfer(address recipient, uint256 amount)"], signer);
-                const tx = await transferContract.transfer(recipient, ethers.parseUnits(amount.toString(), 6));
-                alert("Transaction sent...");
-                await tx.wait();
-                alert("✅ Confirmed!");
-                showBalances(fullWalletAddress);
-            } catch (err) {
-                alert("Error: " + (err.message || err));
-            }
-        });
-
-        // Handle subscription button click
-        document.getElementById('subscribe-btn').addEventListener('click', async () => {
-            try {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const signer = await provider.getSigner();
-                const subscriptionContract = new ethers.Contract("0xYourSubscriptionContractAddress", ["function subscribe()"], signer);
-                const tx = await subscriptionContract.subscribe({ value: ethers.parseUnits("5", 6) });
-                alert("Subscription transaction sent...");
-                await tx.wait();
-                alert("✅ Subscribed! Fee reduced to 0.5%.");
-                showBalances(fullWalletAddress);
-            } catch (err) {
-                alert("Error: " + (err.message || err));
-            }
-        });
-
-        bindModalValidation();
-    });
-
-    // Validate recipient address and amount inputs in the modal
-    function bindModalValidation() {
-        const recipientInput = document.getElementById('modal-recipient');
-        const amountInput = document.getElementById('modal-amount');
-        const feeDisplay = document.getElementById('fee-display');
-        const totalDisplay = document.getElementById('total-display');
-        const addressWarning = document.getElementById('address-warning');
-        const amountWarning = document.getElementById('amount-warning');
-
-        // Validate recipient address (including ENS resolution)
-        recipientInput.addEventListener('input', async () => {
-            let addr = recipientInput.value.trim();
-            if (addr.endsWith('.eth')) {
-                addr = await (await getActiveProvider()).resolveName(addr) || addr;
-                addressWarning.textContent = addr && ethers.isAddress(addr) ? `Resolved ENS: ${shortenAddress(addr)}` : "Invalid ENS name.";
-                recipientInput.style.border = addr && ethers.isAddress(addr) ? "" : "2px solid #FF4D4D";
-            } else {
-                addressWarning.textContent = addr && !ethers.isAddress(addr) ? "Invalid Ethereum address." : "";
-                recipientInput.style.border = addr && !ethers.isAddress(addr) ? "2px solid #FF4D4D" : "";
-            }
-        });
-
-        // Validate amount and update fee/total display
-        amountInput.addEventListener('input', async () => {
-            const val = parseFloat(amountInput.value.trim());
-            if (isNaN(val) || val <= 0) {
-                amountWarning.textContent = "Please enter a valid amount.";
-                return;
-            }
-            const provider = await getActiveProvider();
-            const subscriptionContract = new ethers.Contract("0xYourSubscriptionContractAddress", ["function isSubscribed(address user) view returns (bool)"], provider);
-            const isSubscribed = await subscriptionContract.isSubscribed(fullWalletAddress);
-            const feeRate = isSubscribed ? 0.005 : 0.01;
-            const fee = val * feeRate;
-            const total = val + fee;
-            feeDisplay.textContent = fee.toFixed(2);
-            totalDisplay.textContent = total.toFixed(2);
-            amountWarning.textContent = total > window.currentUSDCBalance ? "Amount exceeds balance." : `Fee: ${feeRate * 100}%${isSubscribed ? ' (subscribed)' : ''}.`;
-        });
-
-        // Handle network selection and update balances/gas
-        document.getElementById('network-select').addEventListener('change', async (e) => {
-            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: e.target.value }] });
-            showBalances(fullWalletAddress);
-            const provider = await getActiveProvider();
-            const gasPrice = await provider.getGasPrice();
-            const gasEstimate = await provider.estimateGas({ to: "0xYourImplicitExTransferAddress", data: "0x" });
-            document.getElementById('gas-display').textContent = ethers.formatEther(gasPrice * gasEstimate).slice(0, 8);
-        });
-    }
-
-    // Display modal with transfer details and handle confirm/cancel
-    function showModal(html, onConfirm) {
-        const overlay = document.getElementById('modal-overlay');
-        const msg = document.getElementById('modal-message');
-        const confirmBtn = document.getElementById('modal-confirm');
-        const cancelBtn = document.getElementById('modal-cancel');
-        msg.innerHTML = html;
-        overlay.style.display = 'flex';
-
-        function cleanup() {
-            overlay.style.display = 'none';
-            confirmBtn.removeEventListener('click', confirmHandler);
-            cancelBtn.removeEventListener('click', cancelHandler);
-        }
-
-        function confirmHandler() { cleanup(); if (onConfirm) onConfirm(); }
-        function cancelHandler() { cleanup(); }
-
-        confirmBtn.addEventListener('click', confirmHandler);
-        cancelBtn.addEventListener('click', cancelHandler);
-
-        bindModalValidation();
-        showBalances(fullWalletAddress);
-    }
-});
+  rerender();
+}

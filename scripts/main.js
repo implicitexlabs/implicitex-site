@@ -1,4 +1,5 @@
-// Utility to display error messages
+// main.js
+
 function showError(message, container = document.body) {
   const errorEl = document.createElement('p');
   errorEl.className = 'error';
@@ -7,7 +8,6 @@ function showError(message, container = document.body) {
   setTimeout(() => errorEl.remove(), 5000);
 }
 
-// Load header and footer dynamically
 function loadComponents() {
   const headerPlaceholder = document.getElementById('header-placeholder');
   const footerPlaceholder = document.getElementById('footer-placeholder');
@@ -28,7 +28,6 @@ function loadComponents() {
       .then(res => res.ok ? res.text() : Promise.reject('Failed to load footer'))
       .then(data => {
         footerPlaceholder.innerHTML = data;
-        // Update year in footer
         const yearEl = document.getElementById('year');
         if (yearEl) {
           yearEl.textContent = new Date().getFullYear();
@@ -42,32 +41,11 @@ function loadComponents() {
   }
 }
 
-// Initialize connect wallet button
 function initConnectWallet() {
   const connectButton = document.getElementById('btn-connect');
-  const modalOverlay = document.querySelector('#modal-overlay');
-
-  if (!connectButton) {
-    showError('Connect wallet button not found.', document.body);
-    return;
-  }
-
-  if (!modalOverlay) {
-    showError('Modal overlay not found.', document.body);
-    return;
-  }
+  if (!connectButton) return;
 
   connectButton.addEventListener('click', () => {
-    // Check for MetaMask (or other wallet provider)
-    if (typeof window.ethereum === 'undefined') {
-      openModal({
-        content: 'No wallet detected. Please install MetaMask or another Web3 wallet.',
-        isError: true
-      });
-      return;
-    }
-
-    // Display wallet connection prompt
     openModal({
       content: `
         <h2>Connect Wallet</h2>
@@ -75,22 +53,18 @@ function initConnectWallet() {
       `
     });
 
-    // Placeholder for wallet connection (to be moved to wallet.js)
+    // Remove previous listeners to avoid duplicates
     const modalConfirm = document.querySelector('#modal-confirm');
-    modalConfirm.addEventListener('click', async () => {
-      try {
-        // Example: Request wallet connection (MetaMask)
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        closeModal();
-        // Update UI (e.g., show wallet address) - to be implemented in wallet.js
-        showError('Wallet connected successfully.', document.querySelector('.main-content'));
-      } catch (error) {
-        openModal({
-          content: `Failed to connect wallet: ${error.message}`,
-          isError: true
-        });
-      }
-    }, { once: true }); // Single-use listener to avoid duplicates
+    if (modalConfirm) {
+      const newModalConfirm = modalConfirm.cloneNode(true);
+      modalConfirm.parentNode.replaceChild(newModalConfirm, modalConfirm);
+
+      newModalConfirm.addEventListener('click', () => {
+        if (window.connectWallet) {
+          window.connectWallet();
+        }
+      });
+    }
   });
 }
 

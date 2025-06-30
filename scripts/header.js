@@ -113,11 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Animation for menu close (to sync with menuPop in header.css)
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
+const headerStyleSheet = document.createElement('style');
+headerStyleSheet.textContent = `
   @keyframes menuClose {
     0% { opacity: 1; transform: translateY(0) scale(1); }
     100% { opacity: 0; transform: translateY(-16px) scale(0.97); }
   }
 `;
-document.head.appendChild(styleSheet);
+document.head.appendChild(headerStyleSheet);
