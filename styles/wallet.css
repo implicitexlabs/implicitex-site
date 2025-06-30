@@ -1,95 +1,47 @@
-/* ===================== */
-/* === VARIABLE ROOT === */
-/* ===================== */
-
-:root {
-    /* Brand Palette */
-    --Brand01: #f2f7e2;
-    --Brand02: #ADADAD;
-    --Brand03: #5cc0ca;
-    --Brand04: #008080;
-    --Brand05: #0D1A2C;
-   
-    /* Toggle & Widgets */
-    
-    --clr01: #848673;
-    --clr02: #42433a;
-    --clr03: #272823;
-    --clr04: #1e1f1c;
-  
-    
-  --font-ui: 'Inter', sans-serif;
-  --font-mono: 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
-
-  /* Font Sizes */
-  --fs-xs: 0.75rem;
-  --fs-sm: 0.875rem;
-  --fs-base: 1rem;
-  --fs-md: 1.125rem;
-  --fs-lg: 1.25rem;
-  --fs-xl: 1.5rem;
-  --fs-xxl: 2rem;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 16px;
-
-  /* Border Strokes */
-  --stroke-light: 1px solid var(--Brand01);
-  --stroke-strong: 2px solid var(--Brand01);
-
-  /* Form Field, Data Output & Errors */
-  
-    --gold:#FFD35C;
-    --red: #A61818;
-  }
-
 /* Button group for clean alignment */
 .button-group {
     display: flex;
     justify-content: center;
-    gap: 24px;              /* More space between buttons */
-    margin-top: 1.7rem;     /* More space above button row */
+    gap: 24px;
+    margin-top: 1.7rem;
 }
 
 /* Remove individual button margin-top if using button-group */
 .button, button {
-    background: var(--Brand05);          /* ImplicitEx brand green */
-    color: var(--Brand01);
-    border: 2px solid var(--Brand01);
+    background: var(--color-5);
+    color: var(--color-1);
+    border: 2px solid var(--color-1);
     padding: 0.85rem 2.1rem;
     font-size: var(--fs-base);
     font-weight: 600;
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     cursor: pointer;
     text-transform: uppercase;
     transition: background 0.2s ease, transform 0.2s ease;
-    box-shadow: none;                  /* ðŸ”¥ REMOVE SHADOW */
+    box-shadow: none;
 }
 
 /* Hover effect */
 .button:hover, button:hover {
-    background: var(--Brand05);
+    background: var(--color-5);
     transform: scale(1.125);
 }
 
 /* Variant for Send / Confirm */
 .btn-send {
-    background: var(--Brand05);
-    color: var(--Brand01);
-    border: 1px solid var(--Brand01);
+    background: var(--color-5);
+    color: var(--color-1);
+    border: 1px solid var(--color-1);
     box-shadow: none;
 }
 
 .btn-send:hover {
-    background: var(--Brand02);
+    background: var(--color-2);
     transform: scale(1.04);
 }
 
 .button:disabled {
-    background: var(--Brand04);
+    background: var(--color-4);
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -97,15 +49,15 @@
 /* Spinner animation */
 @keyframes spin {
     to { transform: rotate(360deg); }
-  }
-  
-  .btn-loading {
+}
+
+.btn-loading {
     position: relative;
     pointer-events: none;
     opacity: 0.7;
-  }
-  
-  .btn-loading::after {
+}
+
+.btn-loading::after {
     content: "";
     position: absolute;
     right: 0.9rem;
@@ -113,21 +65,21 @@
     transform: translateY(-50%);
     width: 1em;
     height: 1em;
-    border: 2px solid var(--Brand01);
+    border: 2px solid var(--color-1);
     border-top: 2px solid transparent;
     border-radius: 50%;
     animation: spin 0.5s linear infinite;
-  }
+}
 
 #wallet-hint {
- min-height: 1.5;
- visibility: hidden;
- opacity: 0;
- text-align: center;
- font-size: 0.9rem;
- color: var(--Brand02);
- transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
- margin-top: 0.5em;
+    min-height: 1.5;
+    visibility: hidden;
+    opacity: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-2);
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    margin-top: 0.5em;
 }
 
 #wallet-hint.visible {
@@ -139,7 +91,7 @@
 
 .wallet-label,
 .balance-label {
-    color: var(--Brand02);
+    color: var(--color-2);
     font-weight: 700;
     font-size: 1.07rem;
     font-family: var(--font-mono);
@@ -149,7 +101,7 @@
 
 #wallet-data,
 .balance-value {
-    color: var(--Brand03);
+    color: var(--color-3);
     font-weight: 400;
     font-size: 1.07rem;
     font-family: var(--font-mono);
@@ -161,22 +113,22 @@
     align-items: center;
     justify-content: flex-start;
     margin: 2.2rem auto 0 auto;
-    color: var(--Brand03);
-    background: var(--Brand05);
+    color: var(--color-3);
+    background: var(--color-5);
     font-family: var(--font-mono);
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     font-size: 1.1rem;
     padding: 0.9rem 1.5rem;
-    max-width: 98vw; /* Nearly full viewport width */
+    max-width: 98vw;
     min-width: 220px;
     min-height: 38px;
-    border: 5px solid var(--Brand01);
+    border: 5px solid var(--color-1);
     letter-spacing: 0.03em;
     font-weight: 500;
     background-clip: padding-box;
-    white-space: nowrap; /* Keep everything on one line */
-    overflow-x: auto; /* Allow scrolling if too wide */
-    word-break: normal; /* Prevent breaking i nthe middle of words */
+    white-space: nowrap;
+    overflow-x: auto;
+    word-break: normal;
 }
 
 #wallet-address::-webkit-scrollbar {
@@ -185,19 +137,19 @@
 }
 
 #wallet-address::-webkit-scrollbar-thumb {
-    background: var(--Brand05);
+    background: var(--color-5);
     border-radius: none;
 }
 
 #wallet-address span#wallet-data:empty::after {
     content: "Not connected";
-    color: var(--Brand02);
+    color: var(--color-2);
     font-style: italic;
 }
 
 #wallet-address span#wallet-data {
     margin-left: 0.5em;
-    color: var(--Brand01);
+    color: var(--color-1);
     font-weight: 600;
     letter-spacing: 0.04em;
     transition: color 0.12s, background 0.16s;
@@ -214,53 +166,52 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: monospace;
-    background: var(--Brand05);
+    font-family: var(--font-mono);
+    background: var(--color-5);
     padding: 10px 20px;
     border-radius: 2px;
-    color: var(--Brand01);
+    color: var(--color-1);
     width: fit-content;
 }
 
 .copy-btn {
-    background:  var(--Brand04);
-    color: var(--Brand01);
+    background: var(--color-4);
+    color: var(--color-1);
     border: none;
     padding: 6px 14px;
-    border-radius: var(--radius-md);
+    border-radius: var(--border-radius-md);
     cursor: pointer;
     font-size: 0.96em;
     transition: background 0.18s;
 }
 
 .copy-btn:hover, .copy-btn:focus {
-    background: var(--Brand04);
+    background: var(--color-4);
 }
 
 .copy-status {
     margin-left: 10px;
     font-size: 0.9em;
-    color: var(--Brand04);
+    color: var(--color-4);
     min-width: 60px;
     transition: opacity 0.2s;
     opacity: 0;
 }
 
 #copy-feedback {
-  display: inline-block;
-  margin-left: 14px;
-  color: var(--gold);
-  font-weight: 700;
-  font-size: 1.08rem;
-  opacity: 0;
-  transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
-  pointer-events: none;
-  white-space: nowrap; /* Never break "Copied!" */
+    display: inline-block;
+    margin-left: 14px;
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 1.08rem;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    white-space: nowrap;
 }
 
 #copy-feedback.visible {
     opacity: 1;
-    /* Optional: add a slight upwardmove for effect */
     animation: copied-fade 1.2s cubic-bezier(.4,0,.2,1) forwards;
 }
 
@@ -272,9 +223,9 @@
 }
 
 #wallet-address span#wallet-data.revealed {
-    background: var(--Brand05);
-    color: var(--gold);
-    border-radius: var(--radius-md);
+    background: var(--color-5);
+    color: var(--color-accent);
+    border-radius: var(--border-radius-md);
     padding: 0.08em 0.38em;
     transition: background 0.2s, color 0.16s;
 }
@@ -286,17 +237,17 @@
 
 #wallet-address span#wallet-data.copied {
     animation: copied-bounce 0.7s cubic-bezier(.21,1.5,.82,1);
-    background: var(--gold);
-    color: #0D1A2C !important;
+    background: var(--color-accent);
+    color: var(--color-5) !important;
 }
 
 @keyframes copied-bounce {
-    0%      { transform: scale(1); background: var(--gold); }
+    0%      { transform: scale(1); background: var(--color-accent); }
     20%     { transform: scale(1.12); }
     45%     { transform: scale(0.95); }
     60%     { transform: scale(1.04); }
     80%     { transform: scale(0.98); }
-    100%    { transform: scale(1); background: var(--gold);}
+    100%    { transform: scale(1); background: var(--color-accent);}
 }
 
 @keyframes fadeinCard {
@@ -304,25 +255,22 @@
     to   { opacity: 1; transform: translateY(0);}
 }
 
-
 #wallet-balances {
     font-family: var(--font-mono);
-    background: var(--Brand05);
-    border-radius: 8px;
+    background: var(--color-5);
+    border-radius: var(--border-radius-md);
     padding: 0.45em 1em;
-    color: var(--Brand03);
+    color: var(--color-3);
     font-size: 1.08rem;
     margin-top: 0.7rem;
     display: inline-block;
     min-width: 16px;
     height: 1em;
-    border: 2px solid var(--Brand01);
-    border-radius: var(--radius-md);
+    border: 2px solid var(--color-1);
 }
 
-/* USDC balance styling */
 #usdc-balance {
-    color: var(--Brand04);
+    color: var(--color-4);
     font-weight: 700;
     font-size: 1.12rem;
     margin-bottom: 1.7rem;
@@ -332,7 +280,7 @@
 .total-highlight {
     font-size: 1.3rem;
     font-weight: bold;
-    color: var(--gold);
+    color: var(--color-accent);
     margin-top: 0.4rem;
 }
 

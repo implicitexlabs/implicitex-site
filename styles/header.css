@@ -1,9 +1,9 @@
 /* Header bar */
 .header-bar {
-  background: var(--color-dark-accent);
+  background: var(--color-2);
   height: 62px;
   width: 100%;
-  box-shadow: 0 1px 8px 0 rgba(82, 75, 75, 0.1); /* --color-mid-gray with opacity */
+  box-shadow: 0 1px 8px 0 rgba(92, 192, 202, 0.10); /* --color-3 with opacity */
   display: flex;
   align-items: center;
   position: fixed;
@@ -31,11 +31,11 @@
 }
 
 .header-logo svg {
-  width: 200px; /* Adjusted to balance with main-content SVGs */
+  width: 200px;
   height: auto;
   max-width: 90vw;
   display: block;
-  fill: var(--color-text-primary);
+  fill: var(--color-5);
 }
 
 /* Nav links (desktop only) */
@@ -45,10 +45,10 @@
 }
 
 .header-nav a {
-  font-family: var(--font-menu);
+  font-family: var(--font-alt);
   font-weight: 700;
   font-size: 1.06rem;
-  color: var(--color-text-primary);
+  color: var(--color-5);
   text-decoration: none;
   letter-spacing: 0.05em;
   padding: 0.12rem 0.16rem;
@@ -59,9 +59,9 @@
 
 .header-nav a:hover,
 .header-nav a:focus {
-  color: var(--color-light-gray);
-  background: rgba(152, 145, 143, 0.1); /* --color-light-gray with opacity */
-  outline: 2px solid var(--color-light-gray);
+  color: var(--color-4);
+  background: rgba(152, 145, 143, 0.10); /* --color-4 with opacity */
+  outline: 2px solid var(--color-4);
   outline-offset: 2px;
 }
 
@@ -86,7 +86,7 @@
   display: block;
   width: 24px;
   height: 3px;
-  background: var(--color-text-primary);
+  background: var(--color-5);
   margin: 3.5px 0;
   border-radius: 2px;
   transition: background 0.3s;
@@ -94,7 +94,7 @@
 
 .header-hamburger:hover span,
 .header-hamburger:focus span {
-  background: var(--color-light-gray);
+  background: var(--color-4);
 }
 
 .header-mobile-menu {
@@ -103,9 +103,9 @@
   position: absolute;
   top: 62px;
   right: 1rem;
-  background: var(--color-dark-accent);
+  background: var(--color-2);
   border-radius: 14px;
-  box-shadow: 0 4px 28px rgba(82, 75, 75, 0.1); /* --color-mid-gray with opacity */
+  box-shadow: 0 4px 28px rgba(92, 192, 202, 0.10); /* --color-3 with opacity */
   padding: 1.1rem 1.7rem 1.1rem 1.2rem;
   min-width: 155px;
   gap: 1rem;
@@ -118,10 +118,10 @@
 }
 
 .header-mobile-menu a {
-  font-family: var(--font-menu);
+  font-family: var(--font-alt);
   font-weight: 700;
   font-size: 1rem;
-  color: var(--color-text-primary);
+  color: var(--color-5);
   text-decoration: none;
   padding: 0.4rem 0.5rem;
   border-radius: 6px;
@@ -132,16 +132,16 @@
 
 .header-mobile-menu a:hover,
 .header-mobile-menu a:focus {
-  background: var(--color-light-gray);
-  color: var(--color-text-primary);
-  outline: 2px solid var(--color-light-gray);
+  background: var(--color-4);
+  color: var(--color-5);
+  outline: 2px solid var(--color-4);
   outline-offset: 2px;
 }
 
 /* Error/warning styles */
 .header-error {
   color: var(--color-error);
-  font-family: var(--font-body);
+  font-family: var(--font-main);
   font-size: 0.9rem;
   text-align: center;
 }

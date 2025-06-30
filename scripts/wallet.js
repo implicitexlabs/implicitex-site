@@ -1,5 +1,3 @@
-// wallet.js
-
 window.userAddress = null;
 
 // Helper: Mask an address (e.g., 0xAb12...cD34)
@@ -187,13 +185,6 @@ async function estimateGas(recipient, amount) {
   }
 }
 
-// Listen for network change to update gas estimate live
-if (window.ethereum && window.ethereum.on) {
-  window.ethereum.on('chainChanged', () => {
-    // No-op here; modal listeners will auto-trigger gas estimate on next input.
-  });
-}
-
 // ===================== SEND MODAL LOGIC =====================
 
 window.openSendModal = function () {
@@ -247,8 +238,8 @@ window.openSendModal = function () {
     let gasSection = `
       <div style="margin-top:0.6em;font-size:0.97em;">
         <b>Network Fees</b><br>
-        <span>Gas (ETH): <span style="color:#999;">placeholder</span> &nbsp;|&nbsp; Gas (Polygon): <span style="color:#999;">placeholder</span></span><br>
-        <span style="color:#6fd46f;">Polygon likely cheaper. <button id="switch-network" style="margin-left:8px;">Switch to Polygon</button></span>
+        Gas (ETH): <span id="eth-gas-display">—</span> | Gas (Polygon): <span id="polygon-gas-display">—</span><br>
+        <button id="switch-network" class="switch-network-btn">Switch Network</button>
       </div>
     `;
 
@@ -367,6 +358,9 @@ window.openSendModal = function () {
             recipientInput.classList.remove('input-valid', 'input-invalid');
             recipientMsg.textContent = '';
             estimateGas('', amountValue);
+            if (window.estimateGasBothNetworks) {
+              window.estimateGasBothNetworks('', amountValue);
+            }
             return;
           }
           if (/^0x[a-fA-F0-9]*$/.test(recipientValue)) {
@@ -390,6 +384,9 @@ window.openSendModal = function () {
             recipientMsg.innerHTML = '<span style="color:#FF4D4D;">Invalid character</span>';
           }
           estimateGas(recipientValue, amountValue);
+          if (window.estimateGasBothNetworks) {
+            window.estimateGasBothNetworks(recipientValue, amountValue);
+          }
         });
       }
 
@@ -422,35 +419,45 @@ window.openSendModal = function () {
             warningMsg.style.display = 'block';
             warningMsg.textContent = 'Only positive numbers allowed.';
             estimateGas(recipientValue, '');
+            if (window.estimateGasBothNetworks) {
+              window.estimateGasBothNetworks(recipientValue, '');
+            }
             return;
           }
           if (val + fee > currentUsdcBalance) {
-              amountInput.classList.remove('input-valid');
-              amountInput.classList.add('input-invalid');
-              warningMsg.style.display = 'block';
-              warningMsg.textContent = 'Amount exceeds balance.';
-              estimateGas(recipientValue, amountValue);
-              return;
-            }
-            amountInput.classList.remove('input-invalid');
-            amountInput.classList.add('input-valid');
-            warningMsg.style.display = 'none';
+            amountInput.classList.remove('input-valid');
+            amountInput.classList.add('input-invalid');
+            warningMsg.style.display = 'block';
+            warningMsg.textContent = 'Amount exceeds balance.';
             estimateGas(recipientValue, amountValue);
-            });
+            if (window.estimateGasBothNetworks) {
+              window.estimateGasBothNetworks(recipientValue, amountValue);
             }
-            
-            // --- Network Switch: Actually switch network and update gas estimate ---
-            const switchNetBtn = document.getElementById('switch-network');
-            if (switchNetBtn) {
-              switchNetBtn.onclick = async () => {
-                await requestSwitchToPolygon();
-                estimateGas(recipientValue, amountValue);
-              };
-            }
-            }, 10); // End setTimeout for modal DOM
-            
-            } // End openModalAndSetup
-            
-            openModalAndSetup();
-            }; // End window.openSendModal
-            
+            return;
+          }
+          amountInput.classList.remove('input-invalid');
+          amountInput.classList.add('input-valid');
+          warningMsg.style.display = 'none';
+          estimateGas(recipientValue, amountValue);
+          if (window.estimateGasBothNetworks) {
+            window.estimateGasBothNetworks(recipientValue, amountValue);
+          }
+        });
+      }
+
+      // --- Network Switch: Actually switch network and update gas estimate ---
+      const switchNetBtn = document.getElementById('switch-network');
+      if (switchNetBtn) {
+        switchNetBtn.onclick = async () => {
+          await requestSwitchToPolygon();
+          estimateGas(recipientValue, amountValue);
+          if (window.estimateGasBothNetworks) {
+            window.estimateGasBothNetworks(recipientValue, amountValue);
+          }
+        };
+      }
+    }, 10);
+  }
+
+  openModalAndSetup();
+};

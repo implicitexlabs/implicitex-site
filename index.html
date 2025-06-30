@@ -23,13 +23,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="styles/theme.css" />
     <link rel="stylesheet" href="styles/main.css" />
     <link rel="stylesheet" href="styles/header.css" />
     <link rel="stylesheet" href="styles/footer.css" />
     <link rel="stylesheet" href="styles/modal.css" />
     <link rel="stylesheet" href="styles/wallet.css" />
-    <!-- Ethers.js without SRI/integrity for localhost! -->
-    <script defer src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
   </head>
   <body>
     <div class="page-container">
@@ -90,8 +89,15 @@
       </p>
     </div>
   </div>
-  <script defer src="scripts/wallet.js"></script>
-  <script defer src="scripts/modal.js"></script>
-  <script defer src="scripts/main.js"></script>
+<!-- <!-- Ethers.js without SRI/integrity for localhost! -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+
+<!-- Modal and core UI scripts -->
+<script defer src="scripts/modal.js"></script>
+<script defer src="scripts/main.js"></script>
+
+<!-- Gas estimator script must come BEFORE wallet.js -->
+<script src="scripts/gas-estimator.js"></script>
+<script defer src="scripts/wallet.js"></script>
 </body>
 </html>

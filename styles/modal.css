@@ -1,27 +1,8 @@
-:root {
-  --color-background: #000000;
-  --color-dark-accent: #1D1714;
-  --color-mid-gray: #524B4B;
-  --color-light-gray: #98918F;
-  --color-text-primary: #E2E0DF;
-  --color-error: #FF0000;
-  --color-accent: #FFD35C;
-  --font-menu: 'Orbitron', 'Space Grotesk', Arial, sans-serif;
-  --font-body: 'Space Grotesk', Arial, sans-serif;
-  --font-mono: 'DM Mono', 'Fira Mono', 'IBM Plex Mono', 'Consolas', monospace;
-  --fs-xs: 0.75rem;
-  --fs-sm: 0.875rem;
-  --fs-base: 1rem;
-  --fs-md: 1.125rem;
-  --fs-lg: 1.25rem;
-  --radius-standard: 6px;
-}
-
 /* Base styles */
 body {
-  background: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
+  background: var(--color-1);
+  color: var(--color-5);
+  font-family: var(--font-main);
   margin: 0;
   min-height: 100vh;
 }
@@ -42,11 +23,11 @@ body {
 
 .cta-button,
 .button {
-  background: var(--color-dark-accent);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-mid-gray);
-  border-radius: var(--radius-standard);
-  font-family: var(--font-menu);
+  background: var(--color-2);
+  color: var(--color-5);
+  border: 1px solid var(--color-3);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-alt);
   font-size: 1rem;
   font-weight: 600;
   padding: 0.55em 1.2em;
@@ -68,8 +49,8 @@ body {
 
 .cta-button:hover,
 .button:hover {
-  background: var(--color-mid-gray);
-  border-color: var(--color-light-gray);
+  background: var(--color-3);
+  border-color: var(--color-4);
   color: #fff;
 }
 
@@ -84,13 +65,13 @@ body {
 }
 
 .modal {
-  background: var(--color-dark-accent);
+  background: var(--color-2);
   border-radius: 16px;
   padding: 2em 1.2em;
   min-width: 330px;
   max-width: 95vw;
   box-shadow: 0 8px 32px 0 #000a, 0 1.5px 3px #2226;
-  color: var(--color-text-primary);
+  color: var(--color-5);
   position: relative;
   font-size: 1.04em;
   display: flex; flex-direction: column; align-items: stretch;
@@ -111,7 +92,7 @@ body {
 .modal-actions {
   display: flex;
   justify-content: center;
-  gap: 1.7em;         /* Wider gap for easier tap targets */
+  gap: 1.7em;
   margin-bottom: 1.1em;
 }
 
@@ -122,9 +103,9 @@ body {
 }
 
 #modal-confirm {
-  background: var(--color-dark-accent);
-  color: var(--color-text-primary);
-  border: 1.5px solid var(--color-light-gray);
+  background: var(--color-2);
+  color: var(--color-5);
+  border: 1.5px solid var(--color-4);
 }
 #modal-confirm:hover {
   background: var(--color-accent);
@@ -134,19 +115,19 @@ body {
 
 #modal-cancel {
   background: transparent;
-  color: var(--color-light-gray);
-  border: 1.5px solid var(--color-light-gray);
+  color: var(--color-4);
+  border: 1.5px solid var(--color-4);
 }
 #modal-cancel:hover {
-  background: var(--color-light-gray);
-  color: var(--color-dark-accent);
+  background: var(--color-4);
+  color: var(--color-2);
 }
 
 /* Modal Disclaimer & Microcopy */
 .modal-disclaimer,
 .modal-footer-copy {
   font-size: var(--fs-xs);
-  color: var(--color-light-gray);
+  color: var(--color-4);
   text-align: center;
   opacity: 0.7;
   margin-top: 1.2em;
@@ -161,10 +142,10 @@ body {
 
 input[type="text"], input[type="number"] {
   width: 100%;
-  border-radius: var(--radius-standard);
+  border-radius: var(--border-radius-md);
   background: #181b23;
-  border: 1px solid var(--color-mid-gray);
-  color: var(--color-text-primary);
+  border: 1px solid var(--color-3);
+  color: var(--color-5);
   font-family: var(--font-mono);
   font-size: 1.04em;
   padding: 0.53em 0.9em;
@@ -175,7 +156,7 @@ input[type="text"], input[type="number"] {
 }
 
 input[type="text"]:focus, input[type="number"]:focus {
-  border-color: var(--color-light-gray);
+  border-color: var(--color-4);
 }
 
 .input-valid {
@@ -183,16 +164,16 @@ input[type="text"]:focus, input[type="number"]:focus {
   box-shadow: 0 0 0 1px #30b886 inset;
 }
 .input-invalid {
-  border: 2px solid #FF4D4D !important;  /* Red */
-  box-shadow: 0 0 0 1px #FF4D4D inset;
+  border: 2px solid var(--color-error) !important;
+  box-shadow: 0 0 0 1px var(--color-error) inset;
 }
 
 /* Output and Data Fields */
 .output-field,
 .modal-address {
   background: #171b22;
-  border-radius: var(--radius-standard);
-  border: 1px solid var(--color-mid-gray);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-3);
   font-family: var(--font-mono);
   font-size: 1.01em;
   padding: 0.54em 0.82em;
@@ -200,7 +181,7 @@ input[type="text"]:focus, input[type="number"]:focus {
   overflow-x: auto;
   max-width: 100%;
   box-sizing: border-box;
-  color: var(--color-light-gray);
+  color: var(--color-4);
   cursor: pointer;
 }
 
@@ -208,24 +189,24 @@ input[type="text"]:focus, input[type="number"]:focus {
 .output-field.expanded {
   white-space: normal;
   word-break: break-all;
-  color: var(--color-text-primary);
+  color: var(--color-5);
 }
 
 /* --- MODAL LABELS & SUMMARY --- */
 .modal-label,
 .summary-label {
   display: block;
-  font-family: var(--font-menu);
+  font-family: var(--font-alt);
   font-weight: 600;
   font-size: var(--fs-sm);
-  color: var(--color-light-gray);
+  color: var(--color-4);
   margin: 1rem 0 0.25rem;
   text-align: left;
   letter-spacing: 0.03em;
 }
 
 .summary-value {
-  color: var(--color-text-primary);
+  color: var(--color-5);
   font-family: var(--font-mono);
   font-size: 1.06em;
   margin: 0 0.18em;
@@ -243,7 +224,7 @@ input[type="text"]:focus, input[type="number"]:focus {
 .gas-estimate-row {
   font-family: var(--font-mono);
   font-size: 1.02em;
-  color: var(--color-light-gray);
+  color: var(--color-4);
   margin-top: 0.16em;
   margin-bottom: 0.22em;
   display: flex;
@@ -252,12 +233,12 @@ input[type="text"]:focus, input[type="number"]:focus {
 }
 .gas-estimate-row .gas-label {
   font-size: var(--fs-xs);
-  color: var(--color-light-gray);
+  color: var(--color-4);
   opacity: 0.77;
 }
 .gas-estimate-row .gas-value {
   font-size: 1.03em;
-  color: var(--color-text-primary);
+  color: var(--color-5);
   font-family: var(--font-mono);
 }
 
@@ -268,7 +249,7 @@ input[type="text"]:focus, input[type="number"]:focus {
 }
 
 .gas-estimate-row .gas-usd {
-  color: var(--color-light-gray);
+  color: var(--color-4);
   font-size: 0.95em;
   margin-left: 0.25em;
   opacity: 0.8;
@@ -277,8 +258,8 @@ input[type="text"]:focus, input[type="number"]:focus {
 /* --- HINTS & WARNINGS --- */
 .hint {
   font-size: var(--fs-xs);
-  font-family: var(--font-body);
-  color: var(--color-light-gray);
+  font-family: var(--font-main);
+  color: var(--color-4);
   margin: 0.32rem 0 0.75rem 0;
   opacity: 0.9;
   min-height: 1.1rem;
@@ -335,3 +316,24 @@ input:invalid ~ .hint {
   padding: 0.22rem;
 }
 
+.switch-network-btn {
+  display: inline-block;
+  margin-top: 0.6em;
+  padding: 0.47em 1.2em;
+  font-size: 1em;
+  font-family: inherit;
+  border: 1.5px solid var(--color-3);
+  background: rgba(80,80,80,0.13);
+  color: var(--color-4);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: background 0.13s, border-color 0.13s, color 0.13s;
+  box-shadow: none;
+  outline: none;
+}
+.switch-network-btn:hover,
+.switch-network-btn:focus {
+  background: #222;
+  border-color: var(--color-4);
+  color: #fff;
+}

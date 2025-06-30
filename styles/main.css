@@ -116,8 +116,8 @@ h1, .tagline {
 
 /* SVG styles */
 .brandmark, .wordmark-svg svg {
-  fill: #FF9900;
-  stroke: #FF9900;
+  fill: #f2f7e2;
+  stroke: #f2f7e2;
   stroke-miterlimit: 10;
   stroke-width: 5;
 }

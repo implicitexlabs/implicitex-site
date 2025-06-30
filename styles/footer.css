@@ -1,10 +1,10 @@
 /* Footer container */
 .footer {
-  background-color: var(--color-dark-accent);
+  background-color: var(--color-2);
   text-align: center;
   padding: 2rem 1rem;
-  color: var(--color-text-primary);
-  border-top: 1px solid var(--color-mid-gray);
+  color: var(--color-5);
+  border-top: 1px solid var(--color-3);
   flex-shrink: 0;
 }
 
@@ -14,12 +14,12 @@
 }
 
 .footer-links a {
-  font-family: var(--font-menu);
+  font-family: var(--font-alt);
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--color-text-primary);
+  color: var(--color-5);
   text-decoration: none;
   transition: color 0.17s, opacity 0.17s;
   opacity: 0.9;
@@ -30,9 +30,9 @@
 
 .footer-links a:hover,
 .footer-links a:focus {
-  color: var(--color-light-gray);
+  color: var(--color-4);
   opacity: 1;
-  outline: 2px solid var(--color-light-gray);
+  outline: 2px solid var(--color-4);
   outline-offset: 2px;
 }
 
@@ -56,26 +56,25 @@
 .social-icons img {
   width: 24px;
   height: 24px;
-  filter: brightness(0.7); /* Approximates --color-light-gray */
+  filter: brightness(0.7); /* Approximates var(--color-4) on icons */
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .social-icons img:hover {
   transform: scale(1.2);
-  filter: brightness(1); /* Approximates --color-text-primary */
-  filter: drop-shadow(0 0 1px var(--color-mid-gray));
+  filter: brightness(1) drop-shadow(0 0 1px var(--color-3));
 }
 
 /* Copyright */
 .footer .copyright {
   font-size: var(--fs-xs);
-  color: var(--color-light-gray);
-  opacity: 0.75; /* Adjusted for ~4.5:1 contrast */
+  color: var(--color-4);
+  opacity: 0.75; /* Sufficient contrast */
 }
 
 /* Error/warning styles */
 .footer-error {
   color: var(--color-error);
-  font-family: var(--font-body);
+  font-family: var(--font-main);
   font-size: 0.9rem;
 }
