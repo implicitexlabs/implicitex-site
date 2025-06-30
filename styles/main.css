@@ -104,6 +104,21 @@ h1, .tagline {
   outline-offset: 2px;
 }
 
+.button-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button-stack > * + * {
+  margin-top: 18px;
+}
+
 /* SVG styles */
 .brandmark, .wordmark-svg svg {
   fill: var(--color-text-primary);
