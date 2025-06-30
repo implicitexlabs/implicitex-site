@@ -69,9 +69,9 @@ Immediate value for merchants: Send $1,000+ monthly, and instantly beat Stripe/P
 User onboarding: One-page ‘First Transfer’ guide on the site.
 
 Fee Distribution Model
-Standard: 97% to recipient, 2% to ImplicitEx ops, 1% to escrow/tax/affiliate reserve.
+Additive 1% fee: $100 sent = $101 total, $100 to recipient, $1 to ImplicitEx)
 
-Alternative (w/ w/Subscription): 99% to recipient, 1% to ImplicitEx.
+Alternative (with Subscription): 99% to recipient, 1% to ImplicitEx.
 
 Transparency: All fee logic is published on-chain and is explorable via Etherscan (or block explorer).
 
